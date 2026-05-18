@@ -10,6 +10,10 @@ export default defineConfig({
 			title: 'Arcana Lang',
 			description: 'The language AI writes — compile-time safety for AI-authored automation.',
 			// GitHub social link will be added once the repo is pushed to GitHub.
+			components: {
+				// Site-wide footer override (TM, copyright, content licensing, scope pointers).
+				Footer: './src/components/Footer.astro',
+			},
 			sidebar: [
 				// Sidebar autogenerates from each section directory as content lands.
 				// 12-page MVP structure:

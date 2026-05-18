@@ -1,0 +1,59 @@
+---
+// Site-wide footer for arcanalang.org.
+// Overrides Starlight's default footer via `components.Footer` in astro.config.mjs.
+---
+<footer class="site-footer">
+	<div class="site-footer__row">
+		<strong>Arcana Lang™</strong>
+		<span class="site-footer__sep">·</span>
+		<span>© 2026 Micah Hurst</span>
+		<span class="site-footer__sep">·</span>
+		<span>
+			Site content under <a href="https://creativecommons.org/licenses/by/4.0/" rel="external license">CC&nbsp;BY&nbsp;4.0</a>.
+			Code examples under <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="external license">CC0&nbsp;1.0</a>.
+		</span>
+	</div>
+	<div class="site-footer__row site-footer__row--sub">
+		<a href="/honest-scope/">Honest&nbsp;scope</a>
+		<span class="site-footer__sep">·</span>
+		<a href="/governance/claims-ledger/">Claims&nbsp;ledger</a>
+		<span class="site-footer__sep">·</span>
+		<a href="/honest-scope/open-intentions/">Open&nbsp;intentions</a>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		margin-top: 3rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--sl-color-gray-5);
+		font-size: 0.85rem;
+		color: var(--sl-color-gray-3);
+		line-height: 1.6;
+	}
+	.site-footer__row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.75rem;
+		justify-content: center;
+		align-items: baseline;
+	}
+	.site-footer__row--sub {
+		margin-top: 0.5rem;
+	}
+	.site-footer__sep {
+		color: var(--sl-color-gray-5);
+	}
+	.site-footer a {
+		color: var(--sl-color-gray-2);
+		text-decoration: underline;
+		text-decoration-color: var(--sl-color-gray-5);
+		text-underline-offset: 2px;
+	}
+	.site-footer a:hover {
+		color: var(--sl-color-text-accent);
+	}
+	.site-footer strong {
+		color: var(--sl-color-text);
+	}
+</style>
