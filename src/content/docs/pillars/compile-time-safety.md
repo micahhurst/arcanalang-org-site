@@ -47,7 +47,7 @@ The current predicate subset is documented in the language specification (which 
 
 ### Compile-time data-flow / taint analysis (scoped)
 
-Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time *within the coverage map documented in the spec* — sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection, and the rest of the named gap list below) still require explicit `@sanitizer` annotations or runtime sanitization at the boundary.
+Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time *within the coverage map documented in the spec* — sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection, and the rest of the named gap list below) still require explicit `@sanitizer` annotations or runtime sanitization at the boundary. (Throughout this page, **WP-#** refers to a numbered Work Package in the Arcana language specification; **D#** to a numbered design decision in the project's public decision record.)
 
 ```arcana
 fn render_user(input: String) -> {Render} Html {

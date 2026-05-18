@@ -3,9 +3,9 @@ title: Marketing-Claims Ledger
 description: Every claim Arcana makes externally is explicitly approved (A-class) or explicitly rejected (R-class). The pre-tag grep enforces the rejections at every release.
 ---
 
-This is the canonical public record of what Arcana **can** and **cannot** be said to do. Every claim that appears on this site, in articles, in conversations, or in social posts has been explicitly *approved* (an A-class claim with a specific scope hedge) or explicitly *rejected* (an R-class entry that the project commits to never using, even in negation).
+This is the canonical public record of what Arcana **can** and **cannot** be said to do. Every claim that appears on this site, in articles, in conversations, or in social posts is either explicitly *approved* (an A-class claim that carries a scope hedge) or explicitly *rejected* (an R-class entry the project commits to never using, even in negation).
 
-The ledger isn't an aesthetic preference. It's enforced: a pre-tag grep runs over release-candidate surfaces and fails the release build if a rejected phrasing slips in. The discipline is structural.
+Enforcement is structural: a pre-tag grep runs over every release-candidate surface and fails the release build if any rejected phrasing appears. The ledger is the boundary; the grep is the check.
 
 The canonical ledger source lives in the Arcana governance record (which publishes alongside the v1.x complete release). What follows is the public-facing summary.
 

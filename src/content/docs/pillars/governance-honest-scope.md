@@ -1,9 +1,9 @@
 ---
 title: Governance & Honest Scope
-description: The credibility substrate. Three parts — non-promises, the current honest state, open intentions (not commitments) — backed by a public marketing-claims ledger, decision provenance, a multi-party council process, and an explicit Mirror-mode self-disclosure.
+description: The trust mechanisms that ground Arcana's other five pillars. Three parts — non-promises, the current honest state, open intentions (not commitments) — backed by a public marketing-claims ledger, numbered decision provenance, a multi-party council process, and an explicit Mirror-mode self-disclosure.
 ---
 
-This pillar is load-bearing, not decorative. **The other five pillars are the language; this pillar is what makes the language's claims about itself trustworthy.** A project that can enumerate its own scope boundaries is more credible than one that cannot — and the discipline that does the enumerating sits here.
+**The other five pillars are the language. This pillar is what makes the claims about that language trustworthy** — a public marketing-claims ledger, numbered decision provenance, a documented multi-party council process, and an explicit Mirror-mode self-disclosure. Without it, the rest is specification without warrant.
 
 ## The honesty triad
 
@@ -19,7 +19,7 @@ The non-promises page lists these explicitly, with the decision-record pointer f
 
 ### 2. The current honest state
 
-A maintained [`KNOWN-ISSUES`](/honest-scope/known-issues/) disclosure: scoped capabilities, partial layers, where our own process has limits. This is the document an adversarial reader is *meant* to find first — and it's the document we point them at on purpose. The disclosure includes:
+A maintained [`KNOWN-ISSUES`](/honest-scope/known-issues/) disclosure: scoped capabilities, partial layers, where our own process has limits. This is the document we surface first for any serious evaluator — what's known to be partial or limited, before any other claim is read. The disclosure includes:
 
 - Taint analysis coverage gaps (per WP-34 §7.1).
 - Per-layer maturity of the four-layer safety stack (Layer 1 shipped; Layers 2-4 partial, named by mechanism).
@@ -30,13 +30,13 @@ A maintained [`KNOWN-ISSUES`](/honest-scope/known-issues/) disclosure: scoped ca
 
 [Open Intentions](/honest-scope/open-intentions/) is the inverse-polarity counterpart of the non-promises. Where non-promises name *what we deliberately won't do*, open intentions name *what we want, don't yet have, and explicitly will not promise*.
 
-The discipline here is the strictest on the site: **intent-without-commitment language only**. Any phrasing along the lines of "will ship," "coming in," "planned for vY," "by date," "next release" is a hard violation. The whole point of the section is the *absence* of commitment.
+The discipline here is precise: **intent-without-commitment language only**. Any phrasing along the lines of "will ship," "coming in," "planned for vY," "by date," "next release" is a hard violation. The whole point of the section is the *absence* of commitment.
 
 Triple function (not just trust signal):
 
 - **Credibility signal** for human readers — "we want this, we'll be honest that we don't have it."
-- **Functional anti-hallucination guardrail** for AI agents — tells generators which capabilities NOT to generate code against.
-- **Corpus-shaping** — teaches future AI tools the boundaries.
+- **Guardrail for AI code generation** — tells generators which capabilities exist on the wish-list but NOT to generate code against them as if they were shipped.
+- **Boundary-setting for future training data** — ensures the next generation of AI tools sees these capabilities labeled correctly in their training corpus.
 
 ## What backs the triad
 
@@ -72,8 +72,6 @@ The honest disclosure: **the current Arcana council process is staffed by AI fro
 
 We are releasing specifically to get that review. We are *not* claiming the AI-only governance is "fine"; we are saying it exhibits a structural risk our own framework names, and the path to reducing the risk is publication + external review.
 
-This is the strongest piece of trust content on the site. We commit to not softening it.
-
 ## On formal external security review
 
 Review during current development is AI-only; **no formal external security review is in place.** Our safety claims are deliberately hedged today — qualifying their scope, their gaps, and where they don't apply. Those qualifiers stay until a formal external security review independently confirms that broader claims are defensible. We are not committing to when, or whether, such a review will take place — only that the hedges stay until then.
@@ -81,5 +79,3 @@ Review during current development is AI-only; **no formal external security revi
 ## What this pillar gives every other pillar
 
 Every claim in [Compile-Time Safety](/pillars/compile-time-safety/), [Effect Contracts](/pillars/effect-contracts/), [Batteries-Included](/pillars/batteries-included/), [Runtime](/pillars/runtime/), and [Self-Hosting](/pillars/self-hosting/) is *grounded by* this pillar's discipline. The hedges aren't decoration; they're the contract that lets the unhedged parts hold.
-
-The credibility substrate is what makes the rest of the language's claims worth reading.

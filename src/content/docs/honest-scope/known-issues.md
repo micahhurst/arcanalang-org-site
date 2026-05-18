@@ -1,6 +1,6 @@
 ---
 title: Known Issues
-description: Arcana Lang's maintained disclosure of known limitations in governance process, compiler implementation scope, documentation accuracy, and spec language precision. Where adversarial readers are pointed first, on purpose.
+description: Arcana Lang's maintained disclosure of known limitations in governance process, compiler implementation scope, documentation accuracy, and spec language precision. Surfaced first for any serious evaluator.
 ---
 
 Arcana Lang is an AI-target language. The people who evaluate it first — SecOps practitioners, AI safety researchers, compiler engineers — are exactly the audience that knows when a project is hiding something. We don't hide things.

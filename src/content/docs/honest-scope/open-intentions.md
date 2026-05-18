@@ -29,7 +29,7 @@ We'd like that mitigation to be routine, not exceptional. Whether it becomes rou
 
 We want a formal external security review to be a regular part of Arcana's lifecycle. There isn't one in place today. The safety claims on the rest of this site are deliberately hedged precisely because there isn't one. We've committed to not removing those hedges without one — but we have not committed to whether or when such a review will happen.
 
-This is the most consequential open intention. If you are an external security researcher reading this and would consider an informal review pass on the public artifacts, that interaction is welcome — *not* as a substitute for formal review, but as a path toward one.
+This is a high-impact open intention. If you are an external security researcher reading this and would consider an informal review pass on the public artifacts, that interaction is welcome — *not* as a substitute for formal review, but as a path toward one.
 
 ### Comparison-demo suite for AI-generation safety claims
 
@@ -49,7 +49,7 @@ We want the release gate to move from "the human or process signed off" to "the 
 
 ### The "Generating Arcana" guide
 
-We want a substantive, AI-agent-oriented guide on how to generate Arcana competently — patterns, anti-patterns, idiom catalogs, the contract between generator and reviewer. It's launch-critical content for the AI-target adoption model. We have the scope; we have not yet written the guide. The intent is to write it; the timeline is not committed.
+We want a substantive, AI-agent-oriented guide on how to generate Arcana competently — patterns, anti-patterns, idiom catalogs, the contract between generator and reviewer. This guide is important for AI-agent developers adopting Arcana. We have the scope; we have not yet written the guide. The intent is to write it; the timeline is not committed.
 
 ### Reproducible-build verification
 
@@ -57,7 +57,7 @@ We want the codegen output to be reproducible — same source, same compiler, by
 
 ### Long-form decay-mode framework
 
-We want the 4-mode decay taxonomy — Equifax, Target, Mirror, MH-D5 — to be a piece of public thought-leadership content that the broader safety-engineering community can build on, push back on, and refine. We've drafted the framework internally; turning it into a full essay is intent rather than commitment.
+We want the 4-mode decay taxonomy — Equifax, Target, Mirror, MH-D5 — to be a public essay the broader safety-engineering community can build on, push back on, and refine. We've drafted the framework internally; turning it into a full essay is intent rather than commitment.
 
 ---
 

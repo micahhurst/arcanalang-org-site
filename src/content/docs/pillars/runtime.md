@@ -3,9 +3,9 @@ title: Portable Runtime & Execution
 description: Arcana compiles to WebAssembly and runs inside a sandboxed runtime — a runtime-side complement to the compile-time guarantees, so that even bypassed compile-time assumptions meet a second boundary at execution. Multi-target codegen extends to web and native mobile.
 ---
 
-Arcana doesn't stop at the compile-time guarantees described in [Pillar 1](/pillars/compile-time-safety/). The compiled artifact runs inside a **sandboxed runtime** — a *runtime-side complement* to the compile-time discipline, so that even bypassed compile-time assumptions meet a second boundary at execution. From one Arcana source, the toolchain also emits code for **web (browser islands + TypeScript backend) and native mobile (iOS Swift, Android Kotlin) targets**.
+Arcana's compile-time guarantees are paired with a runtime-side **sandbox**: even bypassed compile-time assumptions meet a second boundary at execution. From one Arcana source, the toolchain emits to WebAssembly (the canonical target), web (HTMX-style islands + a TypeScript backend), iOS Swift, and Android Kotlin.
 
-This pillar is what makes Arcana's safety story **defense-in-depth** rather than single-layer.
+This is the pillar that makes Arcana's safety story **defense-in-depth** — compile-time enforcement *and* runtime sandboxing, both checking the same effect contract.
 
 ## WebAssembly as the compilation target
 
@@ -17,7 +17,7 @@ Arcana compiles to WebAssembly. WASM is the canonical compilation target for the
 
 ## The Spin runtime sandbox
 
-For server-side execution, Arcana targets [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations. The choice ratifies a project security review decision; other Wasmtime-compatible runtimes are also supported, but Spin is the canonical recommendation for the deployment shape Arcana code is typically generated for.
+For server-side execution, Arcana targets [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations. Spin's capability model aligns with Arcana's deployment contract: capabilities are declared at the boundary, not implied by ambient state. Other Wasmtime-compatible runtimes are also supported, but Spin is the canonical recommendation for the deployment shape Arcana code is typically generated for.
 
 What this gives the safety story in practice:
 
@@ -64,7 +64,7 @@ Cross-platform UI primitives are declared once. The codegen layer translates to 
 
 **Verification-harness parity** — the equal-rigor verification of every codegen target through the self-hosted compiler — is the in-progress piece. See [Self-Hosting & Determinism](/pillars/self-hosting/) for the journey framing; the short version is that codegen output works today, while the *equal-verification path across targets* is the migration in progress.
 
-This distinction matters because "multi-target codegen is in progress" reads as "the output might be wrong" — it isn't. The verification *story* is what's still being equalized across targets.
+This distinction matters because "multi-target codegen is in progress" can be misread as "the output might be wrong." The output is checked today; what's still being equalized is the *path* by which it's checked across targets.
 
 ## On the roadmap
 
@@ -74,6 +74,6 @@ This distinction matters because "multi-target codegen is in progress" reads as 
 
 ## What this pillar gives every other pillar
 
-- **[Compile-Time Safety](/pillars/compile-time-safety/)**'s compile-time guarantees are *paired* with this pillar's runtime-side guarantees — defense-in-depth, not single-layer-and-pray.
+- **[Compile-Time Safety](/pillars/compile-time-safety/)**'s compile-time guarantees are *paired* with this pillar's runtime-side guarantees — defense-in-depth at execution time as well as at build time.
 - **[Effect Contracts & Capability Discipline](/pillars/effect-contracts/)** carries through to deployment: the same admission-controlled effect vocabulary that the compiler checks is what the Spin sandbox enforces at execution time, via the deploy-artifact's capability manifest (see Pillar 2).
 - **[Self-Hosting & Determinism](/pillars/self-hosting/)** is the *journey* underlying this pillar — the compiler that emits these targets is itself self-hosted, and its evolution is honestly documented.

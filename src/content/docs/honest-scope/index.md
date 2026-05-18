@@ -3,9 +3,9 @@ title: Honest Scope
 description: The canonical per-mechanism status — what's shipped, what's partial, what's roadmap, what's deliberately out-of-scope. Read this before evaluating Arcana's safety claims.
 ---
 
-If you are evaluating Arcana adversarially, **this is the page we point you at first, on purpose.**
+This is the canonical per-mechanism status table for Arcana's safety claims — what's shipped, what's partial, what's roadmap, what's deliberately out-of-scope. **We surface it first because a serious evaluator should not have to read source code to find the bounds of our claims.**
 
-Arcana's compile-time guarantees are real and specific. They are also *bounded*, and the bounds are documented in one place — here — rather than discovered by reading the source code. The principle Arcana applies to itself: a project that can enumerate its own scope boundaries is more credible than one that cannot.
+Arcana's compile-time guarantees are real and specific. They are also *bounded* — and the bounds are documented here, in one place. The same principle Arcana applies to AI-generated code applies to its own claims: enumerate the bounds, check at the boundary, refuse to admit drift.
 
 ## Per-mechanism status
 
