@@ -8,8 +8,8 @@ This page exists for a specific reason: there are capabilities we *want* Arcana 
 **Triple function**, not just trust signal:
 
 - A **credibility signal** for human readers — "we want this; we're being honest that we don't have it."
-- A **functional anti-hallucination guardrail** for AI agents — tells generators which capabilities NOT to generate code against.
-- A **corpus-shaping** function — teaches future AI tools the boundaries of what Arcana actually offers right now.
+- A **guardrail for AI code generation** — tells generators which capabilities exist on the wish-list but NOT to generate code against them as if they were shipped.
+- A **boundary-setting effect for future training data** — ensures the next generation of AI tools sees these capabilities labeled correctly in their training corpus.
 
 ## Strictest claim discipline on the site
 

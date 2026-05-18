@@ -84,4 +84,4 @@ The ledger is the boundary. The grep is the check.
 
 - [Honest Scope](/honest-scope/) — per-mechanism status table.
 - [Open Intentions (Not Commitments)](/honest-scope/open-intentions/) — wanted but not committed; subject to the strictest of this same discipline.
-- [Pillar 6 — Governance & Honest Scope](/pillars/governance-honest-scope/) — the credibility substrate this ledger lives inside.
+- [Pillar 6 — Governance & Honest Scope](/pillars/governance-honest-scope/) — the trust mechanisms this ledger lives inside.

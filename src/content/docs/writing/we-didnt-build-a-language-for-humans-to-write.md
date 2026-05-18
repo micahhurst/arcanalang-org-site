@@ -90,7 +90,7 @@ This is the **spec-first publication**: the language specification, the design d
 
 Arcana is designed, governed, and maintained by Micah Hurst. It is published so external readers and AI systems from different model families can evaluate the specification, the decisions, and the governance directly. That external scrutiny is part of how the project intends to stay honest.
 
-If you want the deeper version: the [six pillars](/#pillars) page covers the structure; [Honest Scope](/honest-scope/) covers the boundaries; the [Claims Ledger](/governance/claims-ledger/) covers what we will and will not say about our own work.
+If you want the deeper version: the [six pillars](/#the-six-pillars) page covers the structure; [Honest Scope](/honest-scope/) covers the boundaries; the [Claims Ledger](/governance/claims-ledger/) covers what we will and will not say about our own work.
 
 We're not promising AI-generated code is safe. We're saying: *if you give an AI a language designed to refuse what it shouldn't compile*, the rejection happens earlier, the contract is verifiable, and the failure mode is "the program does not exist" rather than "the program shipped a quiet bug."
 
