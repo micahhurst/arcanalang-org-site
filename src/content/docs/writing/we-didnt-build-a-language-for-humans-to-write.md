@@ -1,0 +1,97 @@
+---
+title: We didn't build a language for humans to write
+description: Arcana Lang is a target for AI code generation, not a human-coding tool. What changes when you design FOR the generator rather than for the developer reading the docs.
+---
+
+AI code generators are confident. They are also wrong in specific, reproducible ways — and the reason they're wrong, more often than people credit, is the *language they're generating into*.
+
+We've been thinking about this backward. We assumed that the right move was to make generators better at the languages we already had. The languages we already had were designed for humans to write. Humans wrote them well enough that the languages survived. Then we pointed code generators at them and were surprised the generators inherited every category of bug those languages permit — leaked resources, undeclared side effects, data-flow that crosses boundaries it shouldn't, packages whose names the generator confidently invented from training noise.
+
+The premise of Arcana Lang is the inverse: design a language **whose syntax, semantics, and ecosystem are optimized for AI systems to generate code in**, with a human as reviewer rather than author. Once you accept that flip, an enormous amount of language design becomes easier — and the safety story changes shape.
+
+## What changes when the generator is the primary author
+
+When you stop optimizing for the human writer and start optimizing for the AI generator + human reviewer, five things stop being trade-offs and start being design rules:
+
+### 1. The vocabulary closes
+
+A generic language has an open-ended package ecosystem because human developers want to choose. An AI generator does not benefit from choice — it benefits from a *fixed surface* that doesn't reward hallucination. Arcana ships with a curated standard library and a blessed-library tier. There is no `arcana install <arbitrary>`. The generator cannot summon a fictional or maintainer-compromised package because *there is no surface that lets the package be summoned*.
+
+This isn't a developer-experience regression. It's the structural reason a typosquat or a model-hallucinated dependency can't make it into production through Arcana. The supply-chain attack surface that mainstream package ecosystems leave open is just *not present* in the closed world.
+
+### 2. Side effects become contracts, not assumptions
+
+In a generic language, the only way to know what a function does is to read its body — or to trust the docs match. In Arcana, every function declares its side effects in the signature, drawn from a closed and governed vocabulary:
+
+```arcana
+fn delete_user(id: UserId) -> {Database, Audit} Result<Unit, Error> {
+  // The signature is the contract. Whatever this body does, it cannot:
+  //   - send email (no {Email} declared)
+  //   - call the network (no {Network} declared)
+  //   - write to the filesystem (no {FileSystem} declared)
+}
+```
+
+A reviewer — human or AI — can reason about *what a unit of generated code is permitted to do* without reading its body. The signature is the verification surface. The compiler enforces the body matches. The effects propagate through call chains so a caller that depends on a side-effect-rich callee must declare that effect too. The contract travels.
+
+### 3. Resources are affine
+
+A resource handle — a database connection, a file handle, an HTTP response — is consumed exactly once. Double-use is a compile error. For Arcana-typed code paths, resource leaks are structurally prevented (scoped to Arcana-typed paths; not across `Unsafe` FFI boundaries or to native resources owned by the host).
+
+```arcana
+let conn = db_connect()
+let a = query(conn, ...)
+let b = query(conn, ...)   // compile error: 'conn' used after move
+```
+
+This catches a category of bug that no amount of generator-testing reliably catches in mainstream languages: forgotten close, double-close, leaked connection on an error path. The compiler refuses to emit the program.
+
+### 4. Schemas don't drift from their derivatives
+
+A `schema User { name: Username, email: Email, ... }` declaration generates the Arcana type, the SQL `CREATE TABLE`, the migration, and the input validation — from one source. There is no drift surface. A generator that produces the type correctly but the SQL incorrectly is producing one artifact, not two, so the disagreement is impossible by construction.
+
+### 5. The compiler's output is a protocol, not prose
+
+Mainstream compilers emit error messages for humans to read. Arcana's diagnostics carry stable error codes (`E####`), structured `expected X, found Y at location` format, and explicit work-package references for further reading. The intent: turn an AI's "the compiler rejected my code" loop from *parse the prose, guess at the fix* into *read the structured payload, apply the named pattern*.
+
+A protocol is a different shape from a complaint. Generators close on protocols.
+
+## "If it compiles, it's safe" — a design aspiration that scopes precisely
+
+This phrase is Arcana's design aspiration. It scopes precisely: **compile-time enforcement of declared effects, affine resource tracking, schema-as-type checks, and the common-pattern subset of taint analysis named in the spec.** It does *not* mean coverage the implementation hasn't yet uniformly provided.
+
+Taint analysis catches common AI-generated injection patterns; sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection) still require explicit `@sanitizer` annotations or runtime sanitization. The four-layer safety stack — effects + affine + structured diagnostics + capability manifest — has per-layer maturity; not every layer is at the same shipped depth today.
+
+The aspiration is honest about its scope. We name what's covered, what's partial, and what's deliberately out-of-scope. That last category, in Arcana's discipline, is *the same kind of artifact* as the approved features — non-promises are numbered and citable.
+
+## The runtime is a second boundary, not the only one
+
+Arcana compiles to WebAssembly and runs inside a sandboxed runtime (Spin is the canonical recommendation). The WASM sandbox + capability manifest is the *runtime-side complement* to the compile-time discipline. The same effect contract that the compiler checks at build time is what the runtime sandbox enforces at execution. Defense-in-depth, not single-layer-and-pray.
+
+## The adoption model is not Rust
+
+Arcana is not in the same category as Rust, Python, or Go. Those languages have community-driven adoption with thousands of human authors, package maintainers, framework maintainers. Arcana's adoption model is closer to **WebAssembly or LLVM IR**: a target that AI systems generate *into*, with humans reviewing and directing rather than hand-writing.
+
+This shapes everything:
+
+- We don't try to grow a developer community in the usual sense. We try to be a substrate that AI systems can generate into competently.
+- We don't optimize for human-writing ergonomics. We optimize for closed vocabularies, machine-readable diagnostics, and contract surfaces that humans (or other AI systems) can audit cheaply.
+- The "user base" is AI systems + the humans who direct them.
+
+## Honest scope is a first-class part of the design
+
+Every claim above carries a scope. Some are uncovered: there is no formal external security review of Arcana in place yet, and our safety hedges stay until there is one. The current council process is staffed by AI from a single model family — by Arcana's own taxonomy of safety-failure modes, this exhibits the structural conditions of "Mirror-mode" risk (an AI generator and an AI reviewer from overlapping corpora closing the review loop with hallucinated consensus). We're explicit about it. The path to reducing the risk is the public release + external review.
+
+The maintained disclosure is the [`KNOWN-ISSUES`](/honest-scope/known-issues/) document and the [Honest Scope](/honest-scope/) page. If you are evaluating Arcana adversarially, those are where we point you first, on purpose.
+
+## What we're publishing now
+
+This is the **spec-first publication**: the language specification, the design decisions, the governance record. The compiler source and binary follow in a later complete-release phase under FSL-1.1-Apache-2.0. We're publishing the *thinking* first so it can be scrutinized, criticized, and refined before the *code* lands. That ordering is deliberate.
+
+Arcana is designed, governed, and maintained by Micah Hurst. It is published so external readers and AI systems from different model families can evaluate the specification, the decisions, and the governance directly. That external scrutiny is part of how the project intends to stay honest.
+
+If you want the deeper version: the [six pillars](/#pillars) page covers the structure; [Honest Scope](/honest-scope/) covers the boundaries; the [Claims Ledger](/governance/claims-ledger/) covers what we will and will not say about our own work.
+
+We're not promising AI-generated code is safe. We're saying: *if you give an AI a language designed to refuse what it shouldn't compile*, the rejection happens earlier, the contract is verifiable, and the failure mode is "the program does not exist" rather than "the program shipped a quiet bug."
+
+That's the bet.
