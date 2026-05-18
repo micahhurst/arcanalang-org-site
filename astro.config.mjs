@@ -10,6 +10,16 @@ export default defineConfig({
 			title: 'Arcana Lang',
 			description: 'The language AI writes — compile-time safety for AI-authored automation.',
 			favicon: '/favicon.svg',
+			expressiveCode: {
+				// Arcana doesn't have a Shiki grammar of its own. Use Rust as the
+				// nearest visual approximation — Arcana shares Rust's fn/let/mut/->/generics
+				// surface enough that Rust's highlighter gives correct keyword + type +
+				// comment + string colouring for ~all the code samples on the site.
+				// The brand-mark `arcana` lang tag is preserved (no source-file changes).
+				shiki: {
+					langAlias: { arcana: 'rust' },
+				},
+			},
 			head: [
 				// Note: SVG favicon is injected by Starlight's `favicon` option above.
 				// Below are PNG fallbacks for browsers without SVG favicon support + apple-touch-icon + OG meta.

@@ -1,0 +1,7 @@
+# Arcana Lang - arcanalang.org
+# https://arcanalang.org/sitemap-index.xml
+
+User-agent: *
+Allow: /
+
+Sitemap: https://arcanalang.org/sitemap-index.xml
