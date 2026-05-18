@@ -11,20 +11,17 @@ export default defineConfig({
 			description: 'The language AI writes — compile-time safety for AI-authored automation.',
 			// GitHub social link will be added once the repo is pushed to GitHub.
 			sidebar: [
-				// Sidebar is intentionally minimal for the initial scaffold.
-				// Will be replaced with the locked 12-page MVP structure as pages land:
+				// Sidebar autogenerates from each section directory as content lands.
+				// 12-page MVP structure:
 				//   Pillars (6) — /pillars/{compile-time-safety,effect-contracts,batteries-included,runtime,self-hosting,governance-honest-scope}/
-				//   Writing — /writing/* (article archive — Day-1 launch piece + cadence)
-				//   Honest Scope — /honest-scope/{known-issues,open-intentions,non-promises,decay-modes}/
+				//   Writing — /writing/* (Day-1 launch article + cadence)
+				//   Honest Scope — /honest-scope/{index,open-intentions,non-promises,decay-modes,known-issues}/
 				//   Governance — /governance/{claims-ledger,council-process,decisions}/
-				//   Glossary, Origin, For AI Agents — top-level pages
-				{
-					label: 'Scaffold (will be replaced)',
-					items: [
-						{ autogenerate: { directory: 'guides' } },
-						{ autogenerate: { directory: 'reference' } },
-					],
-				},
+				//   Top-level: glossary, origin, for-ai-agents.
+				{ label: 'Pillars', items: [{ autogenerate: { directory: 'pillars' } }] },
+				{ label: 'Writing', items: [{ autogenerate: { directory: 'writing' } }] },
+				{ label: 'Honest Scope', items: [{ autogenerate: { directory: 'honest-scope' } }] },
+				{ label: 'Governance', items: [{ autogenerate: { directory: 'governance' } }] },
 			],
 		}),
 	],
