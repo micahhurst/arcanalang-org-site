@@ -42,13 +42,13 @@
   <text x="370" y="420"
         font-family="ui-monospace, 'JetBrains Mono', 'Menlo', 'Consolas', monospace"
         font-weight="400"
-        font-size="22"
-        fill="#94A3B8">compile-time safety for AI-authored automation</text>
+        font-size="26"
+        fill="#CBD5E1">compile-time safety for AI-authored automation</text>
 
   <!-- footer band -->
   <text x="100" y="565"
         font-family="ui-monospace, 'JetBrains Mono', 'Menlo', 'Consolas', monospace"
         font-weight="400"
         font-size="20"
-        fill="#64748B">arcanalang.org  ·  spec-first publication  ·  honest-scope-led</text>
+        fill="#94A3B8">arcanalang.org  ·  spec-first publication  ·  honest-scope-led</text>
 </svg>
