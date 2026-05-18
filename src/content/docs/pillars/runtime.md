@@ -75,5 +75,5 @@ This distinction matters because "multi-target codegen is in progress" can be mi
 ## What this pillar gives every other pillar
 
 - **[Compile-Time Safety](/pillars/compile-time-safety/)**'s compile-time guarantees are *paired* with this pillar's runtime-side guarantees — defense-in-depth at execution time as well as at build time.
-- **[Effect Contracts & Capability Discipline](/pillars/effect-contracts/)** carries through to deployment: the same admission-controlled effect vocabulary that the compiler checks is what the Spin sandbox enforces at execution time, via the deploy-artifact's capability manifest (see Pillar 2).
+- **[Effect Contracts & Capability Discipline](/pillars/effect-contracts/)** carries through to deployment: the same admission-controlled effect vocabulary that the compiler checks is what the Spin sandbox enforces at execution time, via the deploy-artifact's capability manifest.
 - **[Self-Hosting & Determinism](/pillars/self-hosting/)** is the *journey* underlying this pillar — the compiler that emits these targets is itself self-hosted, and its evolution is honestly documented.

@@ -13,7 +13,7 @@ In the 2017 Equifax breach, the vulnerability scanner *did fire*. It produced an
 
 This is **Equifax-mode**: the technical detection layer functions correctly, but the organizational layer that's supposed to act on the detection has been overloaded, deprioritized, or simply broken. The signal is there. The reception is not.
 
-**What Arcana can do about it**: nothing at the language layer. The compiler's job ends when it emits the diagnostic. The organizational responsibility to *read the diagnostic* is outside the language's reach. We can make the diagnostic structured rather than prose, machine-readable rather than ANSI-coded — and we do (see the AI-Repair-Loop spoke under [Pillar 2](/pillars/effect-contracts/)). But "make the alert better" doesn't fix "nobody is empowered to act on the alert in time."
+**What Arcana can do about it**: nothing at the language layer. The compiler's job ends when it emits the diagnostic. The organizational responsibility to *read the diagnostic* is outside the language's reach. We can make the diagnostic structured rather than prose, machine-readable rather than ANSI-coded — and we do (see the AI-Repair-Loop spoke under [Effect Contracts & Capability Discipline](/pillars/effect-contracts/)). But "make the alert better" doesn't fix "nobody is empowered to act on the alert in time."
 
 Naming Equifax-mode is the language's honest move: yes, we emit signals; no, we do not guarantee they're acted on; that's outside our scope.
 
@@ -39,7 +39,7 @@ We discovered this empirically while developing Arcana's own governance process.
 
 **What Arcana can do about it**: not solve it at the language layer. Mirror-mode cannot be solved at the language layer *by definition* — the corpus IS the shared-blind-spot mechanism. What the project *can* do:
 
-- Disclose the failure mode explicitly (this essay; the [Pillar 6](/pillars/governance-honest-scope/) self-disclosure).
+- Disclose the failure mode explicitly (this essay; the [Governance & Honest Scope](/pillars/governance-honest-scope/) self-disclosure).
 - Run cross-model-family probes as a mitigation methodology when high-stakes decisions land, even though that's an organizational mitigation, not a language one.
 - Publish the spec, decisions, and governance record so external readers and AI agents from *different* corpora can review.
 

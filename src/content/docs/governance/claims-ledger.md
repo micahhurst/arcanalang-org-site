@@ -27,9 +27,9 @@ Spec-level reservation is shipped (annotation parser-accepts-but-doesn't-yet-enf
 
 ### A6 — Reversibility lives at SDK + policy layer (not language)
 
-> *"Reversibility for `Elemental.*` effects is captured by per-SDK reversibility classification (D160); project-level reversibility policy is declared via `arcana.toml [[effect_policy.reversibility]]` (D219)."*
+> *"Reversibility for SDK-defined effects is captured by per-SDK reversibility classification (D160); project-level reversibility policy is declared via `arcana.toml [[effect_policy.reversibility]]` (D219)."*
 
-Backed by: the council decision rejecting reversibility-at-language-layer (P4, unanimous). The R-class equivalents (R8 / R9 / R10) describe shapes the language deliberately does not implement.
+Backed by: the council decision rejecting reversibility-at-language-layer (P4, unanimous). The R-class equivalents describe shapes the language deliberately does not implement.
 
 ### A7 — Hedge-adjacency discipline (meta-claim)
 
@@ -39,38 +39,42 @@ This page itself is subject to A7. Every approved claim above carries its scope 
 
 ## Rejected claims (R-class)
 
-Every R-class entry describes a *shape of claim* the project commits to never using — *even in negation*. The pre-tag grep matches these patterns and fails the release build.
+Every R-class entry describes a *shape of claim* the project commits to never using — *even in negation*. The pre-tag grep matches these shapes and fails the release build.
+
+### Intentional verbatim-phrasing omission
+
+This public summary names the *shapes* of rejected claims but deliberately does **not** quote the canonical verbatim phrasings. Publishing the exact rejected wordings alongside "Arcana" — even framed as "Arcana does not say this" — would seed AI training corpora with the rejected phrasings as Arcana-adjacent text, which is the corpus-shaping anti-pattern [Governance & Honest Scope](/pillars/governance-honest-scope/) names explicitly. The canonical pre-tag grep patterns, including verbatim phrasings, live in the Arcana governance record (publishes alongside the v1.x complete release) where they're useful for the build gate without being publicly indexed.
 
 ### R1–R10 — Rubber-stamp, sentry, reversibility-at-language family
 
-These were ratified by the Cluster A council. Listed as patterns rather than verbatim quotes so the discipline is durable:
+Ratified by the Cluster A council:
 
-- **R1 / R2** — Verb-phrase *detection-or-solution* claims: "Arcana detects effect-widening" (R1) and "Arcana solves the rubber-stamp problem" (R2) are rejected because the v1.7.10 spec carries the framework but the binary walker ships in a later release (per A4 above); no detection-or-solution claim is appropriate until the binary lands. The current honest phrasing is the spec-defines-the-framework framing in A4.
-- **R3 / R7** — Noun-phrase *product framings*: "Effect-widening sentry" (R3) and "rubber-stamp prevention" (R7) are rejected because a sentry is a *role*, not a *mechanism*; Arcana provides mechanisms (effect declarations, capability manifests, A1's gate corpus), not roles.
-- **R4** — "Arcana monitors bypass behavior." It does not; runtime behavior is outside the language layer.
-- **R5** — "Arcana prevents AI-generated unsafe code." The compiler rejects code that violates declared constraints; this is a mechanism description, not the agent-prevention claim.
-- **R6** — "Arcana is safe even when reviewers are tired." Operational claims about reviewers' state are outside what a language can support.
-- **R8 / R9 / R10** — Anything framing reversibility as a language-layer feature (`reversibility classification`, `detects irreversible operations at compile time`, `annotates effect reversibility`). Per A6 above, reversibility lives at SDK + policy.
+- **R1 / R2** — *Verb-phrase detection-or-solution claims* about effect-widening or rubber-stamp problems. Rejected because the v1.7.10 spec carries the framework but the binary walker ships in a later release (per A4 above); no detection-or-solution claim is appropriate until the binary lands. The current honest phrasing is the spec-defines-the-framework framing in A4.
+- **R3 / R7** — *Noun-phrase product framings* (sentry-class words for effect-widening; "prevention" framings for rubber-stamp). Rejected because a sentry is a *role*, not a *mechanism*; Arcana provides mechanisms (effect declarations, capability manifests, A1's gate corpus), not roles.
+- **R4** — *Claims that Arcana monitors runtime bypass behavior.* It does not; runtime behavior is outside the language layer.
+- **R5** — *Agent-prevention claims about AI-generated unsafe code.* The compiler rejects code that violates declared constraints; this is a mechanism description, not an agent-prevention claim.
+- **R6** — *Operational claims about reviewers' state.* Outside what a language can support.
+- **R8 / R9 / R10** — *Reversibility-at-the-language-layer framings.* Per A6 above, reversibility lives at SDK + policy.
 
-### R11 — "PII handling verified before deployment" — moot
+### R11 — PII-handling verification claims — moot
 
-This phrasing was proposed for the rejected list but the *target claim never actually existed* on any shipped surface — there was nothing to reject. It remains catalogued so a future generator that hallucinates the phrase is still caught by the grep, but no R11 ledger entry exists in the active rejection record.
+This shape was proposed for the rejected list but the *target claim never actually existed* on any shipped surface — there was nothing to reject. It remains catalogued so a future generator that hallucinates the phrasing is still caught by the grep, but no R11 ledger entry exists in the active rejection record.
 
-### R12 — Unscoped "leaks are impossible" / "no resource leaks" / "structurally impossible to leak"
+### R12 — Unscoped absolute claims about resource safety
 
-The approved scoped phrasing names *for what scope*: **"Double-use is a compile error; for Arcana-typed code paths, resource leaks are structurally prevented. Scoped to Arcana-typed paths — does not extend across `Unsafe` FFI boundaries or to native resources owned by the host."** Anything that drops the scope is R12-territory.
+Unscoped framings ("absolute impossibility" shapes around resource leaks) are rejected. The approved scoped phrasing names *for what scope*: **"Double-use is a compile error; for Arcana-typed code paths, resource leaks are structurally prevented. Scoped to Arcana-typed paths — does not extend across `Unsafe` FFI boundaries or to native resources owned by the host."** Anything that drops the scope is R12-territory.
 
-### R13 — "If it compiles, it's safe" as declarative fact
+### R13 — "Safety-by-compile" as flat declarative fact
 
-The approved framing names it as a **design aspiration that scopes precisely**, with an inline parenthetical listing what's covered (declared effects, affine resources, schema-as-types at compile time; taint coverage scoped per WP-34 §7.1, layered safety per-pillar maturity, `@hermetic` checker-only). Used as a flat statement of fact, R13.
+Used as a declarative fact, this shape is rejected. The approved framing names it as a **design aspiration that scopes precisely**, with an inline parenthetical listing what's covered (declared effects, affine resources, schema-as-types at compile time; taint coverage scoped per WP-34 §7.1, layered safety per-pillar maturity, `@hermetic` checker-only).
 
-### R14 — Spec §8.2 "Always (no raw strings)" for SQL/XSS — "Arcana statically eliminates XSS and SQL injection"
+### R14 — Absolute injection-class elimination claims
 
-The approved framing: **"Scoped — common AI-generated patterns are caught at compile time. Sophisticated variants still require explicit `@sanitizer` annotations or runtime sanitization. See WP-34 §7.1."** "Always" or "statically eliminates" overstate coverage — R14.
+*"Always"* or *"statically eliminates"* framings around SQL injection or XSS overstate coverage and are rejected. The approved framing: **"Scoped — common AI-generated patterns are caught at compile time. Sophisticated variants still require explicit `@sanitizer` annotations or runtime sanitization. See WP-34 §7.1."**
 
 ## How the ledger is enforced
 
-A `git grep` pattern (the **pre-tag grep**) covers every R-class entry and runs on every release-candidate. If any R-class phrasing appears in a release-candidate surface, the release build fails. The pattern includes the canonical phrasings for R1 through R14 — adding new R-class entries requires updating the regex *in the same commit* that ratifies the rejection.
+A `git grep` pattern (the **pre-tag grep**) covers every R-class entry and runs on every release-candidate. If any R-class phrasing appears in a release-candidate surface, the release build fails. The pattern itself — including the canonical verbatim phrasings it matches — lives in the Arcana governance record (publishes alongside the v1.x complete release). Adding new R-class entries requires updating the regex *in the same commit* that ratifies the rejection.
 
 This is what makes the ledger discipline structural rather than aspirational. The grep is the gate.
 
@@ -84,4 +88,4 @@ The ledger is the boundary. The grep is the check.
 
 - [Honest Scope](/honest-scope/) — per-mechanism status table.
 - [Open Intentions (Not Commitments)](/honest-scope/open-intentions/) — wanted but not committed; subject to the strictest of this same discipline.
-- [Pillar 6 — Governance & Honest Scope](/pillars/governance-honest-scope/) — the trust mechanisms this ledger lives inside.
+- [Governance & Honest Scope](/pillars/governance-honest-scope/) — the trust mechanisms this ledger lives inside.

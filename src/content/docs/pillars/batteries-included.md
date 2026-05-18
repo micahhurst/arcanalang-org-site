@@ -24,7 +24,7 @@ fn welcome(user: User) -> {Email, Monitor} Result<Unit, Error> {
 }
 ```
 
-No SendGrid SDK. No configured API key threaded through dependency injection. No `.env` to remember. The `{Email}` effect is the contract; the SDK (configured at the deployment boundary) is the implementation. The AI writes *the contract*. The platform supplies *the implementation*. The same applies for `{SMS}`, `{CRM}`, `{Network}`, `{ObjectStore(read/write)}`, `{Monitor}`, scheduled work, and other capabilities (see [Pillar 2](/pillars/effect-contracts/) for the admission-controlled vocabulary).
+No SendGrid SDK. No configured API key threaded through dependency injection. No `.env` to remember. The `{Email}` effect is the contract; the SDK (configured at the deployment boundary) is the implementation. The AI writes *the contract*. The platform supplies *the implementation*. The same applies for `{SMS}`, `{CRM}`, `{Network}`, `{ObjectStore(read/write)}`, `{Monitor}`, scheduled work, and other capabilities (see [Effect Contracts & Capability Discipline](/pillars/effect-contracts/) for the admission-controlled vocabulary).
 
 ## Schema-as-types
 
@@ -45,7 +45,7 @@ This single declaration produces:
 - The input validation at every boundary (form submission, API ingestion)
 - The serialization shape
 
-Because there's no drift surface — one declaration, multiple derivatives — there's no opportunity for a generator to get the Arcana type right while accidentally producing a SQL schema that allows null where the type forbids it. This is covered in detail in [Pillar 1](/pillars/compile-time-safety/) as the "schema-as-types" mechanism; it appears in this pillar because the *practical* effect is "batteries included for data modeling," not just a type-system convenience.
+Because there's no drift surface — one declaration, multiple derivatives — there's no opportunity for a generator to get the Arcana type right while accidentally producing a SQL schema that allows null where the type forbids it. This is covered in detail in [Compile-Time Safety](/pillars/compile-time-safety/) as the "schema-as-types" mechanism; it appears in this pillar because the *practical* effect is "batteries included for data modeling," not just a type-system convenience.
 
 ## The closed-world stdlib
 

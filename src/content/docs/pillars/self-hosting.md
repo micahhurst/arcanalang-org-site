@@ -11,7 +11,7 @@ Both halves are real — *output is current; verification-path parity is migrati
 
 - **The Arcana compiler compiles itself.** With `stage1=stage2` binary verification: the compiler-built-with-bootstrap and the compiler-built-with-self produce byte-identical output on the verification suite. This has been the case since the v0.5+ self-hosting transition; the canonical reference point is the verification harness in the project's compiler sources.
 - **The OCaml bootstrap compiler is archived.** The original implementation in OCaml is preserved as historical reference but is no longer the active compiler. The active compiler is Arcana, written in Arcana.
-- **The language core and WebAssembly codegen are verified through the self-hosted path.** The core type-system mechanisms ([Pillar 1](/pillars/compile-time-safety/)) and the WASM target ([Pillar 4](/pillars/runtime/)) are checked end-to-end via the self-hosted compiler.
+- **The language core and WebAssembly codegen are verified through the self-hosted path.** The core type-system mechanisms ([Compile-Time Safety](/pillars/compile-time-safety/)) and the WASM target ([Portable Runtime & Execution](/pillars/runtime/)) are checked end-to-end via the self-hosted compiler.
 - **Codegen output is production-quality for current targets.** WebAssembly is verified end-to-end. The most recent sub-version line closed the remaining mobile codegen emitter bugs (iOS Swift and Android Kotlin emitters reached zero open defects in their respective verification suites). If you are generating code into Arcana for these targets, the output is reliable.
 
 The compiler runs in production, emits what it claims to emit, and verifies its output through `stage1=stage2` byte-identical comparison.
@@ -57,5 +57,5 @@ The reader who comes back in six months finds a project that delivered against i
 ## What this pillar gives every other pillar
 
 - **[Compile-Time Safety](/pillars/compile-time-safety/)** is implemented *in Arcana itself* — the compile-time guarantees are produced by a compiler that's subject to those same guarantees. The dogfooding is structural.
-- **[Portable Runtime & Execution](/pillars/runtime/)** depends on the verified codegen output described here. Pillar 4's "the codegen works for current targets" is *grounded by* this pillar's "stage1=stage2 byte-identical verification."
+- **[Portable Runtime & Execution](/pillars/runtime/)** depends on the verified codegen output described here. That pillar's "the codegen works for current targets" is *grounded by* this pillar's "stage1=stage2 byte-identical verification."
 - **[Governance & Honest Scope](/pillars/governance-honest-scope/)** is honest *because* of pages like this one. The journey framing here is what makes the project's trust mechanisms credible.

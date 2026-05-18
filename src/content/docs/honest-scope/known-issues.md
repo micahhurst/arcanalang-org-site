@@ -163,7 +163,7 @@ Transparency about process limitations is part of what makes the process credibl
 
 ### What it is
 
-The Arcana compiler compiles itself, with stage1=stage2 binary verification. The original OCaml bootstrap compiler is archived. "Self-hosted" is accurate for the compiler-implementation-language. See [Pillar 5 — Self-Hosting & Determinism](/pillars/self-hosting/) for the journey framing.
+The Arcana compiler compiles itself, with stage1=stage2 binary verification. The original OCaml bootstrap compiler is archived. "Self-hosted" is accurate for the compiler-implementation-language. See [Self-Hosting & Determinism](/pillars/self-hosting/) for the journey framing.
 
 ### Current honest state
 
@@ -179,7 +179,7 @@ The Arcana compiler compiles itself, with stage1=stage2 binary verification. The
 
 ### What's planned
 
-Codegen golden-test recovery is an active phased work item. Each release ships a delta on which target advances a verification stage. The "Self-Hosting Status" framing on [Pillar 5](/pillars/self-hosting/) explains why we name this as a journey rather than a finished claim.
+Codegen golden-test recovery is an active phased work item. Each release ships a delta on which target advances a verification stage. The "Self-Hosting Status" framing on [Self-Hosting & Determinism](/pillars/self-hosting/) explains why we name this as a journey rather than a finished claim.
 
 ### Why we disclose this
 
@@ -250,7 +250,6 @@ This is the most consequential entry on this page. The honest framing of "we hav
 
 - Open bug reports (the issue tracker activates with the public source release)
 - Performance characteristics or comparative benchmarks (separate publication)
-- Integration with other Elemental-stack tooling (separate roadmap)
 - License terms and usage restrictions (see the footer license summary)
 
 ---

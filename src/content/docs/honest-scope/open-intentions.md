@@ -21,7 +21,7 @@ Allowed language: *"we want," "we'd like," "we are exploring," "this would benef
 
 ### Cross-vendor council participation
 
-We want Arcana's council process to include AI from more than one model family — the current AI-only governance exhibits the structural conditions of Mirror-mode failure that [Pillar 6](/pillars/governance-honest-scope/) names explicitly. We've documented the methodology (a hard-isolated, framing-stripped review pass executed before any identity council) and exercised it once on the founder-locked pillar structure with three independent model families.
+We want Arcana's council process to include AI from more than one model family — the current AI-only governance exhibits the structural conditions of Mirror-mode failure that [Governance & Honest Scope](/pillars/governance-honest-scope/) names explicitly. We've documented the methodology (a hard-isolated, framing-stripped review pass executed before any identity council) and exercised it once on the founder-locked pillar structure with three independent model families.
 
 We'd like that mitigation to be routine, not exceptional. Whether it becomes routine depends on whether the cross-vendor tooling becomes reliable enough at the context-sizes Arcana's councils typically operate at. We are not promising it.
 
@@ -39,7 +39,7 @@ We've designed the methodology. We've not yet run it. We'd like the result to be
 
 ### Curated package ecosystem with verifiable trust tiers
 
-We want Arcana's package surface to grow beyond the closed stdlib into a curated ecosystem with explicit trust tiers — packages that pass criteria, packages that are sandboxed-but-not-trusted, packages that are explicitly user-acknowledged-unsafe. The closed-world property in [Pillar 3](/pillars/batteries-included/) is what we have today; the curated marketplace beyond it is what we'd like.
+We want Arcana's package surface to grow beyond the closed stdlib into a curated ecosystem with explicit trust tiers — packages that pass criteria, packages that are sandboxed-but-not-trusted, packages that are explicitly user-acknowledged-unsafe. The closed-world property in [Batteries-Included](/pillars/batteries-included/) is what we have today; the curated marketplace beyond it is what we'd like.
 
 We are not committing to the trust-tier model, the package authoring discipline, or the marketplace mechanics. We're naming the want.
 
@@ -53,7 +53,7 @@ We want a substantive, AI-agent-oriented guide on how to generate Arcana compete
 
 ### Reproducible-build verification
 
-We want the codegen output to be reproducible — same source, same compiler, byte-identical output across machines. The self-hosted compiler's `stage1=stage2` verification is in this neighborhood ([Pillar 5](/pillars/self-hosting/)); a *full* reproducible-build story (in the [Reproducible Builds project](https://reproducible-builds.org/) sense) for end-user artifacts is a want.
+We want the codegen output to be reproducible — same source, same compiler, byte-identical output across machines. The self-hosted compiler's `stage1=stage2` verification is in this neighborhood ([Self-Hosting & Determinism](/pillars/self-hosting/)); a *full* reproducible-build story (in the [Reproducible Builds project](https://reproducible-builds.org/) sense) for end-user artifacts is a want.
 
 ### Long-form decay-mode framework
 

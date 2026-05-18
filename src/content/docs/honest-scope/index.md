@@ -16,7 +16,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 - **Partial** — implemented in a load-bearing form but not at the full shape the design specifies; cite with the partial-shape hedge.
 - **Approved, not yet implemented** — design ratified for a later release; do not cite as a current capability.
 
-### Compile-Time Safety ([Pillar 1](/pillars/compile-time-safety/))
+### [Compile-Time Safety](/pillars/compile-time-safety/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
@@ -27,7 +27,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Schema-as-types | Shipped | One declaration generates type + SQL + validation. |
 | Effect intersection / policy (D219) | Approved, not yet implemented | Targeted for a later release. |
 
-### Effect Contracts & Capability Discipline ([Pillar 2](/pillars/effect-contracts/))
+### [Effect Contracts & Capability Discipline](/pillars/effect-contracts/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
@@ -40,7 +40,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | `@hermetic` annotation — checker enforcement | Shipped | Compiler rejects `@hermetic` function whose effect row includes any of `{Network}`, `{FileSystem}`, `{Database}`, `{Process}` (per D285a amendment to D285). |
 | `@hermetic` annotation — codegen / emission determinism | Approved, not yet implemented | Lowering-level and emission-level determinism deferred. |
 
-### Batteries-Included ([Pillar 3](/pillars/batteries-included/))
+### [Batteries-Included, Closed-World by Design](/pillars/batteries-included/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
@@ -49,17 +49,17 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Modules as first-class language constructs | Approved, not yet implemented | Folio (blog/CMS), marketplace primitives are later-release. |
 | `Unsafe` escape hatch | Shipped | Opt-in, explicit, compiler-warned at every use site; the closed-world property holds for the safe surface, not as an absolute constraint. |
 
-### Portable Runtime & Execution ([Pillar 4](/pillars/runtime/))
+### [Portable Runtime & Execution](/pillars/runtime/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
 | WebAssembly compilation | Shipped | Verified end-to-end through the self-hosted path. |
 | Spin runtime sandbox | Shipped | Canonical recommendation per the security-debate decision. Other Wasmtime-compatible runtimes supported. |
 | Multi-target codegen — output | Shipped | Web (HTMX islands + TS backend), iOS Swift, Android Kotlin. Most recent sub-version line closed remaining mobile emitter bugs. |
-| Multi-target codegen — verification-harness parity | Partial | Cross-target verification through the self-hosted compiler is in phased migration. See [Pillar 5](/pillars/self-hosting/). |
+| Multi-target codegen — verification-harness parity | Partial | Cross-target verification through the self-hosted compiler is in phased migration. See [Self-Hosting & Determinism](/pillars/self-hosting/). |
 | RPC cross-boundary type safety | Approved, not yet implemented | HTTP+JSON RPC shipped; full client/server type-safety propagation is later-release. |
 
-### Self-Hosting & Determinism ([Pillar 5](/pillars/self-hosting/))
+### [Self-Hosting & Determinism](/pillars/self-hosting/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
@@ -68,7 +68,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Language core verification via self-hosted path | Shipped | Type system, WASM codegen end-to-end. |
 | Verification-harness parity across all targets | Partial / in-progress | Multi-sub-version migration; will not complete inside the current minor line. |
 
-### Governance & Honest Scope ([Pillar 6](/pillars/governance-honest-scope/))
+### [Governance & Honest Scope](/pillars/governance-honest-scope/)
 
 | Mechanism | Status | Notes |
 |---|---|---|
@@ -83,7 +83,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 
 ## On formal external security review
 
-The current Arcana council process is staffed by AI from a single model family. **There is no formal external security review in place.** By Arcana's own taxonomy this exhibits Mirror-mode risk (named in [Pillar 6](/pillars/governance-honest-scope/)).
+The current Arcana council process is staffed by AI from a single model family. **There is no formal external security review in place.** By Arcana's own taxonomy this exhibits Mirror-mode risk (named in [Governance & Honest Scope](/pillars/governance-honest-scope/)).
 
 Our safety claims are deliberately hedged today — qualifying their scope, their gaps, and where they don't apply. Those qualifiers stay until a formal external security review independently confirms that broader claims are defensible. We are not committing to when, or whether, such a review will take place — only that the hedges stay until then.
 
