@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- subtle grid texture (light effect-row-shaped lines) -->
+  <g opacity="0.06" stroke="#F8FAFC" stroke-width="1" fill="none">
+    <line x1="0" y1="155" x2="1200" y2="155"/>
+    <line x1="0" y1="475" x2="1200" y2="475"/>
+  </g>
+
+  <!-- brace mark, left aligned, accented -->
+  <text x="100" y="380"
+        font-family="ui-monospace, 'JetBrains Mono', 'Menlo', 'Consolas', monospace"
+        font-weight="700"
+        font-size="280"
+        fill="#F59E0B"
+        letter-spacing="-12">{}</text>
+
+  <!-- wordmark -->
+  <text x="370" y="295"
+        font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif"
+        font-weight="700"
+        font-size="92"
+        fill="#F8FAFC"
+        letter-spacing="-2">Arcana Lang</text>
+
+  <!-- tagline -->
+  <text x="370" y="360"
+        font-family="ui-sans-serif, system-ui, -apple-system, 'Inter', sans-serif"
+        font-weight="400"
+        font-size="38"
+        fill="#CBD5E1">The language AI writes</text>
+
+  <!-- subtitle -->
+  <text x="370" y="420"
+        font-family="ui-monospace, 'JetBrains Mono', 'Menlo', 'Consolas', monospace"
+        font-weight="400"
+        font-size="22"
+        fill="#94A3B8">compile-time safety for AI-authored automation</text>
+
+  <!-- footer band -->
+  <text x="100" y="565"
+        font-family="ui-monospace, 'JetBrains Mono', 'Menlo', 'Consolas', monospace"
+        font-weight="400"
+        font-size="20"
+        fill="#64748B">arcanalang.org  ·  spec-first publication  ·  honest-scope-led</text>
+</svg>

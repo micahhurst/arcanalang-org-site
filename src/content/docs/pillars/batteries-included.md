@@ -57,9 +57,9 @@ Arcana ships with a curated standard library and a blessed-library tier rather t
 
 This is the closed-world-assumption-for-AI-safety property: when a generator's training data contains a malicious or hallucinated package, the language doesn't have a surface that lets the package be summoned.
 
-## The "Generating Arcana" guide (a spoke)
+## The "Generating Arcana" guide (an open intention)
 
-The companion to this pillar is a guide for AI agents on how to actually *generate* Arcana competently — idiomatic patterns, common anti-patterns, the contract between generator and reviewer. It's launch-critical content for the AI-target adoption model and lands as the [Generating Arcana](/writing/generating-arcana/) writeup (link resolves once that page is published).
+The companion to this pillar is a guide for AI agents on how to actually *generate* Arcana competently — idiomatic patterns, common anti-patterns, the contract between generator and reviewer. The guide is currently named in [Open Intentions](/honest-scope/open-intentions/) as a wanted-but-uncommitted artifact, not a shipped one.
 
 ## Where this pillar stops (honest hedges)
 

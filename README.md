@@ -23,7 +23,7 @@ Pages currently live:
 - Decay-modes essay (`/writing/decay-modes-arcana-cannot-solve/`)
 - KNOWN-ISSUES disclosure (`/honest-scope/known-issues/`)
 
-Week-1 fill-ins: glossary, origin, for-AI-agents, `/honest-scope/non-promises/`, `/writing/generating-arcana/`. Additional writing-cadence articles follow.
+Week-1 fill-ins: glossary, origin, for-AI-agents. Additional writing-cadence articles follow. The consolidated `/honest-scope/non-promises/` page and `/writing/generating-arcana/` guide are tracked as open intentions, not as launch surfaces — they ship alongside the v1.x complete release rather than at the spec-first publication.
 
 ## Commands
 

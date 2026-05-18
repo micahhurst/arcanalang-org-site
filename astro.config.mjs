@@ -9,6 +9,22 @@ export default defineConfig({
 		starlight({
 			title: 'Arcana Lang',
 			description: 'The language AI writes — compile-time safety for AI-authored automation.',
+			favicon: '/favicon.svg',
+			head: [
+				{ tag: 'link', attrs: { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' } },
+				{ tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' } },
+				{ tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' } },
+				{ tag: 'link', attrs: { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' } },
+				{ tag: 'meta', attrs: { property: 'og:image', content: 'https://arcanalang.org/og-image.png' } },
+				{ tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+				{ tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+				{ tag: 'meta', attrs: { property: 'og:image:alt', content: 'Arcana Lang — The language AI writes. Compile-time safety for AI-authored automation.' } },
+				{ tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
+				{ tag: 'meta', attrs: { property: 'og:site_name', content: 'Arcana Lang' } },
+				{ tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+				{ tag: 'meta', attrs: { name: 'twitter:image', content: 'https://arcanalang.org/og-image.png' } },
+				{ tag: 'meta', attrs: { name: 'twitter:image:alt', content: 'Arcana Lang — The language AI writes. Compile-time safety for AI-authored automation.' } },
+			],
 			// GitHub social link will be added once the repo is pushed to GitHub.
 			components: {
 				// Site-wide footer override (TM, copyright, content licensing, scope pointers).

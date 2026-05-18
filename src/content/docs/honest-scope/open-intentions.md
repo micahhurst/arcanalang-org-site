@@ -3,7 +3,7 @@ title: Open Intentions (Not Commitments)
 description: Things Arcana wants, does not yet have, and explicitly does not promise. The strictest claim-discipline surface on the site — intent-without-commitment language only.
 ---
 
-This page exists for a specific reason: there are capabilities we *want* Arcana to have, that we do *not* yet have, and that we *explicitly will not promise*. They sit between two cleaner categories — the [non-promises](/honest-scope/non-promises/) (what we deliberately won't do) and the roadmap items in [Honest Scope](/honest-scope/) (what we've ratified and version-anchored). The middle category — wanted, unbuilt, uncommitted — is the most honest place to put forward-looking intent.
+This page exists for a specific reason: there are capabilities we *want* Arcana to have, that we do *not* yet have, and that we *explicitly will not promise*. They sit between two cleaner categories — the non-promises (what Arcana deliberately won't do, surfaced inline on the pillar pages and tracked as N-numbered decision-record entries) and the roadmap items in [Honest Scope](/honest-scope/) (what we've ratified and version-anchored). The middle category — wanted, unbuilt, uncommitted — is the most honest place to put forward-looking intent.
 
 **Triple function**, not just trust signal:
 
@@ -63,6 +63,6 @@ We want the 4-mode decay taxonomy — Equifax, Target, Mirror, MH-D5 — to be a
 
 ## Stronger than nothing, weaker than a roadmap
 
-If you came to this page looking for a version number for any of the above, **there is not one and that is the point**. Intent + honest naming is the contract. The promise is what we *won't* do (the [non-promises](/honest-scope/non-promises/)) — everything in this page is what we *would like* to do, and we're saying so without inflating the saying into a commitment.
+If you came to this page looking for a version number for any of the above, **there is not one and that is the point**. Intent + honest naming is the contract. The promise is what we *won't* do (Arcana's non-promises — surfaced inline on the pillar pages and tracked as N-numbered decision-record entries) — everything in this page is what we *would like* to do, and we're saying so without inflating the saying into a commitment.
 
 The next time you read this page, some of these items may have moved into the ratified-roadmap category in [Honest Scope](/honest-scope/) (with a D-number and version target). Some may have been moved into the non-promises (decided against). Some may still be here. That movement *between* the categories is the project being honest with itself in public.

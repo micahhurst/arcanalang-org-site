@@ -15,7 +15,7 @@ Explicit non-promises — capabilities deliberately kept out of the language lay
 
 Examples: Arcana does not annotate effect reversibility at the language layer (rejected by council — reversibility lives at SDK + policy layer instead); Arcana does not detect "rubber-stamping" of effect-widening reviews at the language layer (rejected as a noun-phrase product feature); Arcana does not promise PII-handling verification before deployment (the claim is moot — no shipped surface ever made it).
 
-The non-promises page lists these explicitly, with the decision-record pointer for each. See [Non-Promises](/honest-scope/non-promises/).
+Each non-promise is surfaced inline at the relevant pillar with the decision-record pointer. The consolidated N-numbered record publishes alongside the v1.x complete release.
 
 ### 2. The current honest state
 
@@ -75,6 +75,8 @@ We are releasing specifically to get that review. We are *not* claiming the AI-o
 ## On formal external security review
 
 Review during current development is AI-only; **no formal external security review is in place.** Our safety claims are deliberately hedged today — qualifying their scope, their gaps, and where they don't apply. Those qualifiers stay until a formal external security review independently confirms that broader claims are defensible. We are not committing to when, or whether, such a review will take place — only that the hedges stay until then.
+
+If you are an external security researcher reading this and would consider an informal review pass on the public artifacts (the spec, the decision record, the claims ledger, the KNOWN-ISSUES disclosure), that interaction is welcome at <security@arcanalang.org> — *not* as a substitute for formal review, but as a path toward one.
 
 ## What this pillar gives every other pillar
 

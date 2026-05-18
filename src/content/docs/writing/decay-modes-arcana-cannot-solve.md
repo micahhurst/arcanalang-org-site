@@ -25,7 +25,7 @@ This is **Target-mode**: the gate exists, but the organization has *routed aroun
 
 **What Arcana can do about it**: even less than Equifax-mode. Target-mode is *fundamentally unobservable at the language layer*. The language cannot tell that someone made an organizational decision elsewhere to avoid the language entirely. If a team uses Arcana for the parts where the type system helps and uses something else for the parts where it would be friction, the language has no visibility into that second category.
 
-Arcana's [non-promises](/honest-scope/non-promises/) include this explicitly: we do not claim to detect or prevent organizational route-arounds. That work belongs to the audit + governance + supply-chain layer, not to the type system.
+Arcana's non-promises include this explicitly: we do not claim to detect or prevent organizational route-arounds. That work belongs to the audit + governance + supply-chain layer, not to the type system.
 
 ## Mirror-mode — the new AI-era failure
 
@@ -74,7 +74,7 @@ A language's safety claims have lifespans. The day after release, every claim ab
 
 Arcana names the four modes because we can. It would be more comfortable to leave them implicit. *Comfortable is not honest.*
 
-This essay sits alongside Arcana's [non-promises](/honest-scope/non-promises/), the [marketing-claims ledger](/governance/claims-ledger/), and [Open Intentions](/honest-scope/open-intentions/). They're four surfaces of the same discipline: name what we can and cannot do, name how the system fails before someone else has to.
+This essay sits alongside Arcana's non-promises, the [marketing-claims ledger](/governance/claims-ledger/), and [Open Intentions](/honest-scope/open-intentions/). They're four surfaces of the same discipline: name what we can and cannot do, name how the system fails before someone else has to.
 
 ---
 

@@ -75,7 +75,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Marketing-claims ledger (A-class / R-class) | Shipped | See [Claims Ledger](/governance/claims-ledger/). |
 | Decision provenance (D-numbered record) | Shipped | Searchable, citable, durable. |
 | 16-perspective council process | Shipped | Documented in `COUNCIL-PROCESS.md`. |
-| Non-promises (N-numbered record) | Shipped | See [Non-Promises](/honest-scope/non-promises/). |
+| Non-promises (N-numbered record) | Shipped | Surfaced inline on the pillar pages; the N-numbered record itself publishes alongside the v1.x complete release. |
 | Open Intentions (Not Commitments) | Shipped | See [Open Intentions](/honest-scope/open-intentions/). |
 | Mirror-mode self-disclosure | Shipped | Current council process is AI-only; this is named explicitly. |
 | `KNOWN-ISSUES.md` published with release | Shipped | See [Known Issues](/honest-scope/known-issues/). |
@@ -91,11 +91,11 @@ Our safety claims are deliberately hedged today — qualifying their scope, thei
 
 Many statuses above use the words **approved** or **roadmap**. These are *intent*, not *commitment*. Planning artifacts may be changed, deferred, or removed during further planning or implementation if the work turns out differently than expected. Treat anything labeled "approved," "later release," "roadmap," or "partial" as *current intent*, not a guarantee.
 
-The only commitments are what is *shipped* and what we explicitly will *not* do (the [non-promises](/honest-scope/non-promises/)). Everything else is provisional.
+The only commitments are what is *shipped* and what we explicitly will *not* do (the non-promises, surfaced inline on the pillar pages). Everything else is provisional.
 
 ## Where the rest of the story lives
 
-- [Non-Promises](/honest-scope/non-promises/) — what Arcana deliberately will not do.
 - [Open Intentions](/honest-scope/open-intentions/) — what we want, do not yet have, and explicitly do not promise.
+- Non-promises (what Arcana deliberately will not do) — surfaced inline on the pillar pages; the N-numbered record publishes alongside the v1.x complete release.
 - [Known Issues](/honest-scope/known-issues/) — the at-release-time disclosure of current process and implementation limitations.
 - [Claims Ledger](/governance/claims-ledger/) — the A-class approved / R-class rejected ledger that the pre-tag grep enforces.
