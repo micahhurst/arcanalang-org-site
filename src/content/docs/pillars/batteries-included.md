@@ -8,7 +8,7 @@ The capabilities an AI generator most often reaches for — sending email, sendi
 This isn't a packaging convenience. It's two simultaneous properties:
 
 - A **productivity property**: the AI writes *intent*, not integration glue. There is no SDK to download, configure, version-pin, mock for tests, and re-pin when it deprecates. The code expresses what it wants to do; the runtime expresses how.
-- A **safety property**: a closed world with no arbitrary package-pull is a structural reduction of the supply-chain surface available to AI-generated code. The 2025-era pattern of an AI generator confidently `npm install`-ing a typosquat or a maintainer-compromised package isn't something Arcana code can do, because the resolution surface that allows it doesn't exist.
+- A **safety property**: a closed world with no arbitrary package-pull is a structural reduction of the supply-chain surface available to AI-generated code *within the safe code path* (Arcana retains an opt-in `Unsafe` FFI escape hatch covered below; the closed-world property applies to the default code path, not as an absolute constraint on what's possible). The 2025-era pattern of an AI generator confidently `npm install`-ing a typosquat or a maintainer-compromised package isn't something the default Arcana surface can do, because the resolution surface that allows it doesn't exist.
 
 These properties reinforce each other: the productivity gain *comes from* the closed-world model. They aren't two separate design moves that happen to coexist.
 
@@ -63,7 +63,7 @@ The companion to this pillar is a guide for AI agents on how to actually *genera
 
 ## Where this pillar stops (honest hedges)
 
-- **The effect set shipped today** covers the common-case capabilities (see the [language specification](https://github.com/) for the canonical list). Specific effects with limited current coverage — for example, scheduled work, certain `{Monitor}` instrumentation patterns, file-system traversal cases — are honestly documented in the spec rather than hidden.
+- **The effect set shipped today** covers the common-case capabilities (the canonical list is documented in the language specification, which publishes alongside the v1.x complete release). Specific effects with limited current coverage — for example, scheduled work, certain `{Monitor}` instrumentation patterns, file-system traversal cases — are honestly documented in the spec rather than hidden.
 - **Modules** as first-class language constructs (Folio for blog/CMS, marketplace primitives) are a later-release deliverable. The current closed-world layer is the stdlib + blessed libs; the *modules-as-marketplace* tier follows.
 - **Closed-world doesn't mean closed-language.** Arcana has an `Unsafe` escape hatch for FFI to native code when truly needed — but `Unsafe` is opt-in, explicit, and the compiler warns at every use site. The closed-world property holds for the safe surface, not as an absolute constraint on what's possible.
 

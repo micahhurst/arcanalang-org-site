@@ -17,15 +17,16 @@ Arcana compiles to WebAssembly. WASM is the canonical compilation target for the
 
 ## The Spin runtime sandbox
 
-For server-side execution, Arcana targets [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations. The choice ratifies the security-debate decision (memory: the founder's spring 2026 security debate concluded with Spin for WASM); other Wasmtime-compatible runtimes are also supported, but Spin is the canonical recommendation for the deployment shape Arcana code is typically generated for.
+For server-side execution, Arcana targets [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations. The choice ratifies a project security review decision; other Wasmtime-compatible runtimes are also supported, but Spin is the canonical recommendation for the deployment shape Arcana code is typically generated for.
 
 What this gives the safety story in practice:
 
 ```arcana
-fn quotes_endpoint() -> {Network, Database(read)} Result<Json, Error> {
-  // compile-time: this function declared {Network, Database(read)}.
+fn quotes_endpoint() -> {Network, Database(local)} Result<Json, Error> {
+  // compile-time: this function declared {Network, Database(local)}.
   // run-time (Spin sandbox): the deployed component is granted exactly
-  //   {Network outbound to whitelisted hosts, Database read-only}.
+  //   {Network outbound to whitelisted hosts, Database access scoped to
+  //    the SDK-configured local connection}.
   // anything else attempted at runtime — file system, environment vars,
   //   process spawn — the host runtime refuses.
 }

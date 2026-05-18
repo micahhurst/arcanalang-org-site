@@ -24,7 +24,7 @@ This isn't a developer-experience regression. It's the structural reason a typos
 In a generic language, the only way to know what a function does is to read its body — or to trust the docs match. In Arcana, every function declares its side effects in the signature, drawn from a closed and governed vocabulary:
 
 ```arcana
-fn delete_user(id: UserId) -> {Database, Audit} Result<Unit, Error> {
+fn delete_user(id: UserId) -> {Database(server), Monitor} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:
   //   - send email (no {Email} declared)
   //   - call the network (no {Network} declared)
@@ -36,7 +36,7 @@ A reviewer — human or AI — can reason about *what a unit of generated code i
 
 ### 3. Resources are affine
 
-A resource handle — a database connection, a file handle, an HTTP response — is consumed exactly once. Double-use is a compile error. For Arcana-typed code paths, resource leaks are structurally prevented (scoped to Arcana-typed paths; not across `Unsafe` FFI boundaries or to native resources owned by the host).
+A resource handle — a database connection, a file handle, an HTTP response — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host.
 
 ```arcana
 let conn = db_connect()
@@ -80,7 +80,7 @@ This shapes everything:
 
 ## Honest scope is a first-class part of the design
 
-Every claim above carries a scope. Some are uncovered: there is no formal external security review of Arcana in place yet, and our safety hedges stay until there is one. The current council process is staffed by AI from a single model family — by Arcana's own taxonomy of safety-failure modes, this exhibits the structural conditions of "Mirror-mode" risk (an AI generator and an AI reviewer from overlapping corpora closing the review loop with hallucinated consensus). We're explicit about it. The path to reducing the risk is the public release + external review.
+Every claim above carries a scope. Some are uncovered: there is no formal external security review of Arcana in place yet, and our safety hedges stay until there is one. The current council *deliberation* phase is staffed by AI from a single model family — by Arcana's own taxonomy of safety-failure modes (see [Four decay modes Arcana cannot solve at the language layer](/writing/decay-modes-arcana-cannot-solve/)), this exhibits the structural conditions of *Mirror-mode* risk. Cross-vendor *verification* probes — fresh instances of Claude, Codex, and Gemini reading framing-stripped behavior records — are operational at the verification layer as a partial mitigation. The path to fully reducing the risk is the public release + external review from outside the project's training-corpus reach.
 
 The maintained disclosure is the [`KNOWN-ISSUES`](/honest-scope/known-issues/) document and the [Honest Scope](/honest-scope/) page. If you are evaluating Arcana adversarially, those are where we point you first, on purpose.
 

@@ -29,7 +29,7 @@ This is what gives an evaluator — a human reader, an AI reviewer, a deployment
 
 ### Affine resource types
 
-A resource handle — a database connection, a file handle, an open HTTP response, an API session — is consumed exactly once. Double-use is a compile error. For Arcana-typed code paths, resource leaks are structurally prevented; this is scoped to Arcana-typed paths and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host runtime.
+A resource handle — a database connection, a file handle, an open HTTP response, an API session — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host runtime — those remain the host's responsibility.
 
 ```arcana
 let conn = db_connect()
@@ -41,13 +41,13 @@ The affine discipline catches a class of bugs that no amount of testing reliably
 
 ### Refinement types (scoped)
 
-Refinement types narrow a base type with a predicate that must hold at every use site. A `Username = String where len ≤ 32` is a `String` that *cannot* hold a 40-character value — the compiler enforces the predicate everywhere a `Username` is consumed. This catches a class of input-validation bugs at the type level rather than at runtime.
+Refinement types narrow a base type with a predicate that must hold at every use site. A `Username = String where len ≤ 32` is a `String` that *cannot* hold a 40-character value — the compiler enforces the predicate everywhere a `Username` is consumed, *scoped to the predicate forms currently supported by the implementation* (general-predicate refinement remains roadmap, not uniformly shipped). This catches a class of input-validation bugs at the type level rather than at runtime.
 
-Refinement coverage is scoped to the predicate forms currently supported by the implementation; general-predicate refinement remains roadmap rather than uniformly shipped. See the [language specification](https://github.com/) (link pending GitHub repo publication) for the current predicate subset.
+The current predicate subset is documented in the language specification (which publishes alongside the v1.x complete release).
 
 ### Compile-time data-flow / taint analysis (scoped)
 
-Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time.
+Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time *within the coverage map documented in the spec* — sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection, and the rest of the named gap list below) still require explicit `@sanitizer` annotations or runtime sanitization at the boundary.
 
 ```arcana
 fn render_user(input: String) -> {Render} Html {

@@ -1,12 +1,12 @@
 ---
-title: Arcana Lang
-description: The language AI writes — compile-time safety for AI-authored automation.
+title: The language AI writes
+description: Arcana Lang — compile-time safety for AI-authored automation. Six pillars, honest scope, spec-first publication.
 template: splash
 hero:
   tagline: The language AI writes — compile-time safety for AI-authored automation.
   actions:
     - text: The six pillars
-      link: /#pillars
+      link: '#the-six-pillars'
       icon: right-arrow
     - text: Honest scope
       link: /honest-scope/
@@ -14,19 +14,35 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 Arcana Lang is a programming language designed from the ground up as a compile-time-safe *target for AI code generation*. Generic languages — TypeScript, Python, Ruby — were designed for humans to write. AI generators that target them inherit every safety problem those languages permit. Arcana takes the opposite premise: if an AI generates code that would violate a declared safety constraint, the compiler rejects it before the code can run.
 
 This site is the public **language specification, design decisions, and governance record**.
 
-:::caution[Initial scaffold]
-This site is in initial scaffold. The six pillar pages, the Day-1 launch article, and the honest-scope content are landing in subsequent commits. Until then, the canonical content lives in the [Arcana repository](https://github.com/) (link pending GitHub repo creation).
-:::
+## The six pillars
 
 <CardGrid stagger>
+	<LinkCard title="Compile-Time Safety" href="/pillars/compile-time-safety/" description="The irreducible core — effect system, affine resource types, refinement types, and scoped data-flow analysis." />
+	<LinkCard title="Effect Contracts & Capability Discipline" href="/pillars/effect-contracts/" description="Effects as operational contracts that travel from authoring through checking to deployment." />
+	<LinkCard title="Batteries-Included, Closed-World by Design" href="/pillars/batteries-included/" description="First-class capabilities under a closed-world model — simultaneously a productivity and supply-chain-safety property." />
+	<LinkCard title="Portable Runtime & Execution" href="/pillars/runtime/" description="WebAssembly + sandboxed runtime + multi-target codegen. A runtime-side complement to the compile-time guarantees." />
+	<LinkCard title="Self-Hosting & Determinism" href="/pillars/self-hosting/" description="A journey, stated honestly. Stage1=stage2 self-hosted; verification-harness migration is the in-progress piece." />
+	<LinkCard title="Governance & Honest Scope" href="/pillars/governance-honest-scope/" description="The credibility substrate — non-promises, current honest state, open intentions, and a public marketing-claims ledger." />
+</CardGrid>
+
+## Recent writing
+
+<CardGrid>
+	<LinkCard title="We didn't build a language for humans to write" href="/writing/we-didnt-build-a-language-for-humans-to-write/" description="Arcana Lang is a target for AI code generation, not a human-coding tool. What changes when you design FOR the generator." />
+	<LinkCard title="Four decay modes Arcana cannot solve at the language layer" href="/writing/decay-modes-arcana-cannot-solve/" description="How safety gates fail over time. Extends Jason Iannazzo's Equifax/Target framework with two AI-era additions." />
+</CardGrid>
+
+## About this publication
+
+<CardGrid>
 	<Card title="Spec-first publication" icon="document">
-		The language specification, design decisions, and governance record under CC BY 4.0. The compiler source and binary follow in a later complete-release phase under FSL-1.1-Apache-2.0.
+		Language specification, design decisions, and governance record live now under CC BY 4.0. Compiler source and binary follow in a later complete-release phase under FSL-1.1-Apache-2.0.
 	</Card>
 	<Card title="Adoption model" icon="rocket">
 		Closer to WebAssembly or LLVM IR than to Rust or Python: code is *generated* into Arcana by AI systems and reviewed by humans, rather than hand-written by a developer community.
@@ -34,7 +50,7 @@ This site is in initial scaffold. The six pillar pages, the Day-1 launch article
 	<Card title="Honest scope" icon="approve-check-circle">
 		Arcana's safety claims are deliberately hedged today — qualifying their scope, their gaps, and where they don't apply. The hedges stay until a formal external security review independently confirms broader claims are defensible.
 	</Card>
-	<Card title="Six pillars" icon="star">
-		Compile-Time Safety · Effect Contracts & Capability Discipline · Batteries-Included · Portable Runtime & Execution · Self-Hosting & Determinism · Governance & Honest Scope. *(Dedicated pages landing soon.)*
+	<Card title="A seventh, future-only pillar" icon="seti:lock">
+		A *Curated-Ecosystem-Future* pillar is part of the long-term identity but explicitly out of the launch set — surfaced under [Open Intentions (Not Commitments)](/honest-scope/open-intentions/) rather than as a current capability.
 	</Card>
 </CardGrid>

@@ -7,7 +7,7 @@ This is the canonical public record of what Arcana **can** and **cannot** be sai
 
 The ledger isn't an aesthetic preference. It's enforced: a pre-tag grep runs over release-candidate surfaces and fails the release build if a rejected phrasing slips in. The discipline is structural.
 
-The canonical ledger source lives in the [Arcana governance record](https://github.com/) (link pending GitHub repo publication). What follows is the public-facing summary.
+The canonical ledger source lives in the Arcana governance record (which publishes alongside the v1.x complete release). What follows is the public-facing summary.
 
 ## Approved claims (A-class)
 
@@ -45,8 +45,8 @@ Every R-class entry describes a *shape of claim* the project commits to never us
 
 These were ratified by the Cluster A council. Listed as patterns rather than verbatim quotes so the discipline is durable:
 
-- **R1 / R3 / R7** — "Effect-widening sentry" / "rubber-stamp prevention" / similar noun-phrase product framings for behaviors Arcana cannot causally guarantee (a sentry is a *role*, not a *mechanism*; Arcana provides mechanisms).
-- **R2** — "Arcana solves the rubber-stamp problem." Verb-phrase version of the same overclaim.
+- **R1 / R2** — Verb-phrase *detection-or-solution* claims: "Arcana detects effect-widening" (R1) and "Arcana solves the rubber-stamp problem" (R2) are rejected because the v1.7.10 spec carries the framework but the binary walker ships in a later release (per A4 above); no detection-or-solution claim is appropriate until the binary lands. The current honest phrasing is the spec-defines-the-framework framing in A4.
+- **R3 / R7** — Noun-phrase *product framings*: "Effect-widening sentry" (R3) and "rubber-stamp prevention" (R7) are rejected because a sentry is a *role*, not a *mechanism*; Arcana provides mechanisms (effect declarations, capability manifests, A1's gate corpus), not roles.
 - **R4** — "Arcana monitors bypass behavior." It does not; runtime behavior is outside the language layer.
 - **R5** — "Arcana prevents AI-generated unsafe code." The compiler rejects code that violates declared constraints; this is a mechanism description, not the agent-prevention claim.
 - **R6** — "Arcana is safe even when reviewers are tired." Operational claims about reviewers' state are outside what a language can support.

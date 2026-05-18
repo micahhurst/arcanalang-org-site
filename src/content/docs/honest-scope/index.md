@@ -37,7 +37,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Structured diagnostics — full agent-grade payload | Approved, not yet implemented | Suggested-fix-as-diff, confidence levels, causal-chain linking — later release. |
 | Capability manifest — overflow detection | Shipped | Effect-row size enforcement at compile time. |
 | Capability manifest — full content | Partial | Effect row per exported function, work-package range, compiler version, configuration hash, dependency versions are progressively filling in. |
-| `@hermetic` annotation — checker enforcement | Shipped | Compiler rejects `@hermetic` function reaching denied effects (`{Time}`, `{Random}`, `{Network}`, `{FileSystem}`, `{Env}`). |
+| `@hermetic` annotation — checker enforcement | Shipped | Compiler rejects `@hermetic` function whose effect row includes any of `{Network}`, `{FileSystem}`, `{Database}`, `{Process}` (per D285a amendment to D285). |
 | `@hermetic` annotation — codegen / emission determinism | Approved, not yet implemented | Lowering-level and emission-level determinism deferred. |
 
 ### Batteries-Included ([Pillar 3](/pillars/batteries-included/))

@@ -34,7 +34,7 @@ The `@hermetic` annotation marks a function as effect-bounded for the purposes o
 
 Current state, precisely:
 
-- **Checker enforcement is shipped.** A function annotated `@hermetic` is rejected by the compiler if its effect row includes denied effects (`{Time}`, `{Random}`, `{Network}`, `{FileSystem}`, `{Env}`). The compile-time contract is real.
+- **Checker enforcement is shipped.** A function annotated `@hermetic` is rejected by the compiler if its effect row includes any of the denied effects `{Network}`, `{FileSystem}`, `{Database}`, `{Process}` (per the D285a amendment to D285). The compile-time contract is real.
 - **Codegen-level / emission-level determinism is deferred.** The lowering and emission stages do not yet produce a binary that *additionally* guarantees determinism beyond what the checker rejects. The contract is checker-enforced, not codegen-enforced.
 
 The honest phrasing: `@hermetic` is a checker contract today. Read it as "the compiler refuses to compile a function that reaches denied effects," not as "this binary is guaranteed deterministic at the machine level."
@@ -43,16 +43,16 @@ The honest phrasing: `@hermetic` is a checker contract today. Read it as "the co
 
 Two reasons:
 
-1. **It's true.** The migration is in flight, and the dates are visible in the public sprint record. Pretending otherwise would itself be a marketing-claim violation — a thing we are committed to not doing.
+1. **It's true.** The migration is in flight, and progress is tracked publicly once the Arcana repository publishes alongside the v1.x complete release. Pretending otherwise would itself be a marketing-claim violation — a thing we are committed to not doing.
 2. **The framing prevents a common misread.** "Self-hosted compiler" is a phrase with strong connotations (Rust, Zig — fully verified through the language's own toolchain end-to-end). Without the journey framing, a reader could over-infer that level of completion. With the journey framing, we name what's done (a lot, more than most languages at this stage) and what's not (the across-target verification-path equalization).
 
 Saying so explicitly is the point. The reader who comes back in six months and finds the migration further along finds a project that delivered against its own honest timeline, not a project that quietly redefined what it had said.
 
 ## Where to look for the canonical state
 
-- The [verification suite](https://github.com/) (link pending GitHub publication) is the canonical source of which targets have which verification stages migrated.
+- The verification suite — the canonical source of which targets have which verification stages migrated — publishes alongside the v1.x complete release.
 - [Honest Scope](/honest-scope/) carries the per-mechanism status — including this pillar's `@hermetic` checker-vs-codegen distinction — in one place.
-- The [decisions log](https://github.com/) (link pending) names the specific decisions phasing the harness migration across sub-versions.
+- The decisions log (which names the specific decisions phasing the harness migration) publishes alongside the v1.x complete release.
 
 ## What this pillar gives every other pillar
 

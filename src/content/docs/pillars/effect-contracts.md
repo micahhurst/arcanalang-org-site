@@ -12,7 +12,7 @@ If Pillar 1 says "effects are typed," Pillar 2 says "and the typing means someth
 Most effect systems exist to enforce purity — to mark which functions can't do `IO` so the compiler can reorder, inline, or memoize them. Arcana's effect system exists for a different reason: to give an external evaluator (a human reviewing AI-generated code, an AI reviewing AI-generated code, a deployment manifest auditing what's about to ship) confidence about *what a unit of code is permitted to do* without reading its body.
 
 ```arcana
-fn delete_user(id: UserId) -> {Database, Audit} Result<Unit, Error> {
+fn delete_user(id: UserId) -> {Database(server), Monitor} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:
   //   - send email (no {Email} declared)
   //   - call out to the network (no {Network} declared)
@@ -26,7 +26,9 @@ The evaluator gets to reason from the signature. The compiler enforces the body 
 
 ## An admission-controlled effect vocabulary
 
-The set of effect names is a **closed, governed vocabulary**, not a free-for-all. Effects are added, retired, or rejected through a documented process with explicit admission criteria. The current set includes `{Email}`, `{SMS}`, `{CRM}`, `{Network}`, `{Database}`, `{ObjectStore(read)}`, `{ObjectStore(write)}`, `{FileSystem}`, `{Monitor}`, `{Time}`, `{Random}`, `{Env}`, `{Render}`, and platform-gating effects `{iOS}`/`{Android}` — among others. The full inventory is normative in the [language specification](https://github.com/) (link pending GitHub publication).
+The set of effect names is a **closed, governed vocabulary**, not a free-for-all. Effects are added, retired, or rejected through a documented process with explicit admission criteria. The current set includes `{Email}`, `{SMS}`, `{CRM}`, `{Network}`, `{Database(local)}` / `{Database(server)}` / `{Database(synced)}`, `{ObjectStore(read)}` / `{ObjectStore(write)}`, `{FileSystem}`, `{Monitor}`, `{Render}` — among others (see the language specification for the full normative inventory; the public repository publishes alongside the v1.x complete release).
+
+Separately, the codegen-target dimensions (Web · iOS · Android · Server · Edge) are tracked through an effect-availability matrix rather than as effects themselves — `{iOS}` is not an effect; iOS is a target that constrains which effects compile to it.
 
 What this admission discipline produces in practice:
 
@@ -42,9 +44,7 @@ The same effect contract appears at three stages of the pipeline:
 
 1. **Authoring** — the function signature declares its effects. This is what the writer (often an AI) commits to.
 2. **Checking** — the compiler verifies the body matches the signature. Effect contagion propagates: if function `A` calls function `B` declaring `{Database}`, then `A` must also declare `{Database}` (or contain the effect within a scope the type system permits).
-3. **Deployment** — the compiled artifact emits a **machine-readable capability manifest** describing what every exported function can do, so a deployment manifest auditor (or another piece of software) can verify the binary against the declared shape *without re-running the compiler*.
-
-Stage 3's full capability-manifest content is *partial today*. Overflow detection on the effect row is shipped; the complete manifest payload (effect row per exported function, work-package range, compiler version, configuration content hash, dependency versions) is roadmap. The mechanism exists; the content is filling in.
+3. **Deployment** — the compiled artifact emits a machine-readable capability manifest *(today: effect-row overflow detection on exported functions; the full manifest payload — effect row per exported function, work-package range, compiler version, configuration content hash, dependency versions — is roadmap, not yet shipped)* describing what every exported function can do, so a deployment manifest auditor (or another piece of software) can verify the binary against the declared shape *without re-running the compiler*. The mechanism exists; the content is filling in.
 
 ## The AI-Repair-Loop spoke (machine-readable diagnostics)
 
@@ -65,7 +65,7 @@ This spoke is what makes Arcana navigable by AI agents rather than just compilab
 
 - **Capability manifest** (`D286`): overflow-detection mechanism shipped; full manifest content is partial. Don't read "machine-readable capability manifest" as "all manifest fields populated today."
 - **Structured diagnostics** (`D284`): format and error-code registry shipped; agent-grade fix-as-diff + confidence + causal chains land in a later release.
-- **`@hermetic` annotation** (`D285`): checker-enforced today — functions annotated `@hermetic` ARE rejected by the compiler if they reach time/random/network/filesystem/env effects. Lowering- and emission-level determinism are deferred; this is checker-enforcement of a contract, not a codegen-level determinism guarantee.
+- **`@hermetic` annotation** (`D285`, as amended by D285a): checker-enforced today — functions annotated `@hermetic` ARE rejected by the compiler if their effect row includes any of the denied effects `{Network, FileSystem, Database, Process}`. Lowering- and emission-level determinism are deferred; this is checker-enforcement of a contract, not a codegen-level determinism guarantee.
 - **Effect intersection / policy** (`D219`): the general `[[effect_policy]]` mechanism for SDK-declared intersection rules is approved for a later release; not shipped.
 
 See [Honest Scope](/honest-scope/) for the canonical per-mechanism status table.

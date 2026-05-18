@@ -7,21 +7,23 @@ Deploys to [Cloudflare Pages](https://pages.cloudflare.com/).
 
 ## What's here
 
-This repository contains the *presentation* of Arcana for public readers, AI agents, and external evaluators. The canonical *content* — language specification, design decisions, governance record, marketing-claims ledger — lives in the [Arcana repository](https://github.com/) (link pending). This site renders / curates / cross-references that content into a navigable public surface.
+This repository contains the *presentation* of Arcana for public readers, AI agents, and external evaluators. The canonical *content* — language specification, design decisions, governance record, marketing-claims ledger — lives in the Arcana repository (which publishes alongside the v1.x complete release). This site renders / curates / cross-references that content into a navigable public surface.
 
 ## Status
 
-**Initial scaffold.** Stack and content architecture are locked; pages are landing in subsequent commits. The 12-page MVP target:
+**Spec-first publication, v1 — live.** Language specification, design decisions, governance record, marketing-claims ledger, six pillar pages, and the first two launch articles ship at the initial public release. The compiler source and binary follow in a later complete-release phase under FSL-1.1-Apache-2.0.
+
+Pages currently live:
 
 - Home (`/`)
-- Six pillar pages (`/pillars/{compile-time-safety, effect-contracts, batteries-included, runtime, self-hosting, governance-honest-scope}`)
-- Day-1 launch article (`/writing/we-didnt-build-a-language-for-humans-to-write`)
-- Honest-scope summary (`/honest-scope/`)
-- Claims ledger (`/governance/claims-ledger`)
-- Decay-modes essay (`/writing/decay-modes-arcana-cannot-solve`)
-- Open Intentions, Not Commitments (`/honest-scope/open-intentions`)
+- Six pillar pages (`/pillars/{compile-time-safety, effect-contracts, batteries-included, runtime, self-hosting, governance-honest-scope}/`)
+- Honest scope (`/honest-scope/` + `/honest-scope/open-intentions/`)
+- Marketing-claims ledger (`/governance/claims-ledger/`)
+- Day-1 launch article (`/writing/we-didnt-build-a-language-for-humans-to-write/`)
+- Decay-modes essay (`/writing/decay-modes-arcana-cannot-solve/`)
+- KNOWN-ISSUES disclosure (`/honest-scope/known-issues/`)
 
-Subsequent pages (glossary, origin, for-AI-agents, additional articles) fill in over the launch week.
+Week-1 fill-ins: glossary, origin, for-AI-agents, `/honest-scope/non-promises/`, `/writing/generating-arcana/`. Additional writing-cadence articles follow.
 
 ## Commands
 

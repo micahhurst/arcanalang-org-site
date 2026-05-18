@@ -60,6 +60,10 @@ Council process limitations are themselves disclosed (see Mirror-mode below).
 
 The current release-gate is a multi-mechanism gate (`make release-gate`) that checks for substantive items — spec ambiguity sweep, effect-soundness fuzzing, codegen golden tests, security review, messaging calibration, the `KNOWN-ISSUES.md` disclosure, response readiness. Moving the gate from *attestation-of-presence* to *re-executable evidence* (gate items running their stated checks at release time, not just signing off they ran) is a ratified roadmap item. Honest framing: the discipline exists; the *automation of the discipline* is filling in. See [Claims Ledger](/governance/claims-ledger/) for the current state.
 
+### Synthetic-violation test corpus + meta-process gate audit
+
+The discipline above is backed by a structural mechanism: **every blocking error code carries a synthetic-violation regression test** that runs on every compiler change. A canary-of-canary sentinel fails the runner if the runner ever no-ops — so the project doesn't just trust that "the gate fires"; the gate's continued firing is itself audited. This is the same kind of compile-time-checked discipline Arcana applies to user code, applied recursively to its own release-gate. It's an approved A-class claim in the marketing-claims ledger because the mechanism is shipped and the meta-process is operational, not aspirational.
+
 ## Mirror-mode self-disclosure
 
 Arcana's own taxonomy includes a failure mode it names **Mirror-mode** — when an AI generator and an AI reviewer (both trained on overlapping corpora) close a review loop with hallucinated consensus, missing shared blind spots a human or off-corpus reviewer would catch.
