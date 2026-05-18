@@ -1,0 +1,40 @@
+---
+title: Arcana
+description: The language AI writes — compile-time safety for AI-authored automation.
+template: splash
+hero:
+  tagline: The language AI writes — compile-time safety for AI-authored automation.
+  actions:
+    - text: The six pillars
+      link: /#pillars
+      icon: right-arrow
+    - text: Honest scope
+      link: /honest-scope/
+      icon: right-arrow
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Arcana is a programming language designed from the ground up as a compile-time-safe *target for AI code generation*. Generic languages — TypeScript, Python, Ruby — were designed for humans to write. AI generators that target them inherit every safety problem those languages permit. Arcana takes the opposite premise: if an AI generates code that would violate a declared safety constraint, the compiler rejects it before the code can run.
+
+This site is the public **language specification, design decisions, and governance record**.
+
+:::caution[Initial scaffold]
+This site is in initial scaffold. The six pillar pages, the Day-1 launch article, and the honest-scope content are landing in subsequent commits. Until then, the canonical content lives in the [Arcana repository](https://github.com/) (link pending GitHub repo creation).
+:::
+
+<CardGrid stagger>
+	<Card title="Spec-first publication" icon="document">
+		The language specification, design decisions, and governance record under CC BY 4.0. The compiler source and binary follow in a later complete-release phase under FSL-1.1-Apache-2.0.
+	</Card>
+	<Card title="Adoption model" icon="rocket">
+		Closer to WebAssembly or LLVM IR than to Rust or Python: code is *generated* into Arcana by AI systems and reviewed by humans, rather than hand-written by a developer community.
+	</Card>
+	<Card title="Honest scope" icon="approve-check-circle">
+		Arcana's safety claims are deliberately hedged today — qualifying their scope, their gaps, and where they don't apply. The hedges stay until a formal external security review independently confirms broader claims are defensible.
+	</Card>
+	<Card title="Six pillars" icon="star">
+		Compile-Time Safety · Effect Contracts & Capability Discipline · Batteries-Included · Portable Runtime & Execution · Self-Hosting & Determinism · Governance & Honest Scope. *(Dedicated pages landing soon.)*
+	</Card>
+</CardGrid>
