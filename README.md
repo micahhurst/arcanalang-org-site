@@ -1,6 +1,6 @@
 # arcanalang.org — website source
 
-The source for the public Arcana language website at **arcanalang.org**.
+The source for the public **Arcana Lang** website at **arcanalang.org** (the language is "Arcana Lang" as the brand / formal name; "Arcana" is used in body prose once context is established).
 
 Built with [Astro](https://astro.build/) + [Starlight](https://starlight.astro.build/).
 Deploys to [Cloudflare Pages](https://pages.cloudflare.com/).

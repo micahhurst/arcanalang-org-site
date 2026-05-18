@@ -7,7 +7,7 @@ export default defineConfig({
 	site: 'https://arcanalang.org',
 	integrations: [
 		starlight({
-			title: 'Arcana',
+			title: 'Arcana Lang',
 			description: 'The language AI writes — compile-time safety for AI-authored automation.',
 			// GitHub social link will be added once the repo is pushed to GitHub.
 			sidebar: [
