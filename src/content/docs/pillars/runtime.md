@@ -34,6 +34,10 @@ fn quotes_endpoint() -> {Network, Database(local)} Result<Json, Error> {
 
 The compile-time check and the runtime sandbox enforce the *same* contract — once at build time, once at execution time.
 
+### Honestly named: the host-shim layer is Rust
+
+The piece that sits between a deployed Arcana WASM module and the host process — `arcana-runtime` (the wasmtime + SQLite embedding core) and `arcana-serve` (the HTTP shim that exposes WASM exports over `POST /_rpc/v1/{fn}`) — is written in Rust. Customer-facing surface remains the Arcana program and the Wasmtime/Spin sandbox; the Rust crates are the host-integration implementation. See [Honest Scope](/honest-scope/) for the full per-mechanism status.
+
 ## Multi-target codegen: web + native mobile
 
 The same Arcana source compiles to multiple frontend / mobile targets:

@@ -20,10 +20,12 @@ The compiler runs in production, emits what it claims to emit, and verifies its 
 
 **The verification-harness migration.** Bringing every codegen target through the self-hosted compiler with **equal rigor** — same per-target verification suite, same golden-file fixtures, same end-to-end check at every release — is a multi-sub-version migration phased across the current release line and successive releases. It will not complete inside the current minor line.
 
+Honestly named: **the verification harness is currently a Rust toolchain.** A roughly 33,000-line Rust crate (`tests/verify-selfhost`) is the wasmtime-backed harness that runs the `stage1=stage2` byte-identical check and the WASM-GC execution checks Arcana relies on. The companion `tests/verify-exec` crate (~900 lines) is the wasmtime host for compiled WASM-GC modules, and a small cargo-fuzz crate fuzzes the string-table ABI. *That* is the "legacy infrastructure" the migration is moving away from — moving the harness logic into Arcana itself, run by the self-hosted compiler, is the journey work.
+
 What this means concretely:
 
-- For the WebAssembly target, the verification path is fully self-hosted.
-- For mobile and other targets, parts of the verification harness still use legacy infrastructure as the migration proceeds. The *output* is checked; the *equal-verification path across targets* is what's being equalized.
+- For the WebAssembly target, the verification path is fully self-hosted from the *compiler* side. The *harness* that drives the check is still Rust.
+- For mobile and other targets, parts of the verification harness still use legacy infrastructure as the migration proceeds. The *output* is checked; the *equal-verification path across targets* is what's being equalized, and the harness implementation language is moving from Rust to Arcana as part of that work.
 - The migration is explicit and phased rather than ambient — every release has a published delta on which target moves a verification stage forward.
 
 We're explicit about this so a reader doesn't infer that "journey" means "the codegen is unreliable." The codegen output is checked today; the verification *path* is what's still being made equal across targets.

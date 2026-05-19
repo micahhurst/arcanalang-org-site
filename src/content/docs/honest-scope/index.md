@@ -55,6 +55,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 |---|---|---|
 | WebAssembly compilation | Shipped | Verified end-to-end through the self-hosted path. |
 | Spin runtime sandbox | Shipped | Canonical recommendation per the security-debate decision. Other Wasmtime-compatible runtimes supported. |
+| Host runtime utilities — implementation language | Rust | The `arcana-runtime` (wasmtime + SQLite embedding core) and `arcana-serve` (HTTP shim) crates are Rust. Customer-facing surface is the Arcana program; Rust is the host-shim implementation. |
 | Multi-target codegen — output | Shipped | Web (HTMX islands + TS backend), iOS Swift, Android Kotlin. Most recent sub-version line closed remaining mobile emitter bugs. |
 | Multi-target codegen — verification-harness parity | Partial | Cross-target verification through the self-hosted compiler is in phased migration. See [Self-Hosting & Determinism](/pillars/self-hosting/). |
 | RPC cross-boundary type safety | Approved, not yet implemented | HTTP+JSON RPC shipped; full client/server type-safety propagation is later-release. |
@@ -66,6 +67,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Compiler self-hosting | Shipped | `stage1=stage2` byte-identical verification. |
 | OCaml bootstrap | Archived | Preserved for reference; not the active compiler. |
 | Language core verification via self-hosted path | Shipped | Type system, WASM codegen end-to-end. |
+| Verification-harness — implementation language | Rust (current) | The harness that runs `stage1=stage2` and the WASM-GC execution checks is presently a ~33k-LOC Rust toolchain (`tests/verify-selfhost`, `tests/verify-exec`, `arcana-str-ops/fuzz`). Migrating the harness into Arcana itself is the journey work below. |
 | Verification-harness parity across all targets | Partial / in-progress | Multi-sub-version migration; will not complete inside the current minor line. |
 
 ### [Governance & Honest Scope](/pillars/governance-honest-scope/)
