@@ -15,9 +15,9 @@ Arcana compiles to WebAssembly. WASM is the canonical compilation target for the
 - **A second safety boundary.** WASM's own sandbox model — explicit capability imports, no ambient I/O, deterministic execution semantics — is a structural complement to Arcana's compile-time enforcement. If a compile-time assumption is bypassed somehow (an `Unsafe` block doing something the type system couldn't see), the runtime sandbox still constrains what the binary can actually do at execution time.
 - **AI-target ergonomics.** WASM's bounded resource model and explicit imports make AI-generated programs easier to audit at deployment — there's no hidden global state for the program to depend on, and the capability surface is enumerated at the boundary rather than implied.
 
-## The Spin runtime sandbox
+## Server-side runtime: custom wasmtime host shim today, Spin as recommended target shape
 
-For server-side execution, Arcana targets [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations. Spin's capability model aligns with Arcana's deployment contract: capabilities are declared at the boundary, not implied by ambient state. Other Wasmtime-compatible runtimes are also supported, but Spin is the canonical recommendation for the deployment shape Arcana code is typically generated for.
+For server-side execution, the **shipped implementation** is a custom Wasmtime-based host shim (`arcana-runtime` for the wasmtime + SQLite embedding core; `arcana-serve` for the HTTP shim that exposes WASM exports). [Spin](https://www.fermyon.com/spin) — a Wasmtime-based WASM runtime designed for small, stateless services with explicit capability declarations — is the **recommended deployment target shape** for the same Arcana-emitted WASM modules, because Spin's capability model aligns with Arcana's deployment contract (capabilities declared at the boundary, not implied by ambient state). At present, Spin is design intent for deployment; the shipped runtime integration is the custom wasmtime shim.
 
 What this gives the safety story in practice:
 

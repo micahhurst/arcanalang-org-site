@@ -5,7 +5,7 @@ description: Every claim Arcana makes externally is explicitly approved (A-class
 
 This is the canonical public record of what Arcana **can** and **cannot** be said to do. Every claim that appears on this site, in articles, in conversations, or in social posts is either explicitly *approved* (an A-class claim that carries a scope hedge) or explicitly *rejected* (an R-class entry the project commits to never using, even in negation).
 
-Enforcement is structural: a pre-tag grep runs over every release-candidate surface and fails the release build if any rejected phrasing appears. The ledger is the boundary; the grep is the check.
+Enforcement is documented as a release-prep protocol: the canonical regex covering every R-class entry lives in the Arcana governance record (`marketing-claims-v1.7.10.md`) and is run over release-candidate surfaces as part of release prep. Wiring this regex into `make release-gate` so a violation fails the release build automatically — rather than being caught by manual operator invocation — is a ratified roadmap item being staged through the council process; the discipline exists at the protocol level today and the automation is filling in.
 
 The canonical ledger source lives in the Arcana governance record (which publishes alongside the v1.x complete release). What follows is the public-facing summary.
 
@@ -74,7 +74,7 @@ Used as a declarative fact, this shape is rejected. The approved framing names i
 
 ## How the ledger is enforced
 
-A `git grep` pattern (the **pre-tag grep**) covers every R-class entry and runs on every release-candidate. If any R-class phrasing appears in a release-candidate surface, the release build fails. The pattern itself — including the canonical verbatim phrasings it matches — lives in the Arcana governance record (publishes alongside the v1.x complete release). Adding new R-class entries requires updating the regex *in the same commit* that ratifies the rejection.
+A `git grep` pattern (the **pre-tag grep**) covers every R-class entry. The pattern itself — including the canonical verbatim phrasings it matches — lives in the Arcana governance record (`marketing-claims-v1.7.10.md`, which publishes publicly alongside the v1.x complete release). The grep is currently run as a release-prep protocol step rather than as an automated gate in `make release-gate`; wiring it into the automated gate is a ratified roadmap item being staged through the council process. Adding new R-class entries requires updating the regex *in the same commit* that ratifies the rejection.
 
 This is what makes the ledger discipline structural rather than aspirational. The grep is the gate.
 

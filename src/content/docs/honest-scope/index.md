@@ -53,12 +53,13 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 
 | Mechanism | Status | Notes |
 |---|---|---|
-| WebAssembly compilation | Shipped | Verified end-to-end through the self-hosted path. |
-| Spin runtime sandbox | Shipped | Canonical recommendation per the security-debate decision. Other Wasmtime-compatible runtimes supported. |
-| Host runtime utilities — implementation language | Rust | The `arcana-runtime` (wasmtime + SQLite embedding core) and `arcana-serve` (HTTP shim) crates are Rust. Customer-facing surface is the Arcana program; Rust is the host-shim implementation. |
+| WebAssembly compilation | Shipped | Compiled to WASM-GC. Two implementations live in the repo (see WASM emission row below). |
+| Custom wasmtime host shim | Shipped | The `arcana-runtime` (wasmtime + SQLite embedding core) and `arcana-serve` (HTTP shim) crates are the shipped host-integration implementation. Both Rust. Customer-facing surface is the Arcana program; Rust is the host-shim layer. |
+| Spin runtime sandbox | Recommended target shape | Spin is the canonical recommendation for deployment shape because its capability model aligns with Arcana's deployment contract. **The shipped host shim is the custom wasmtime-based implementation above, not a Spin integration.** No Spin-specific integration code is tracked in the current source tree; Spin is design intent / target-shape, while the wasmtime-based custom shim is what's actually wired today. |
+| TS / Swift / Kotlin emitter logic | Arcana (self-hosted) | The emitter cores for web TypeScript, iOS Swift, and Android Kotlin are pure Arcana: ~16.5k LOC across `ts_codegen.arcana`, `swift_codegen.arcana`, `kotlin_codegen.arcana`, RPC-client scaffolding (`emit_swift_rpc`, `emit_kotlin_rpc`), `mobile_common`, and `xcodegen`. |
+| TS / Swift / Kotlin post-processing + scaffolding layer | Rust | After the Arcana emitters produce their outputs, additional transformation runs in the Rust harness: web TS-to-JS script-shape rewrites, iOS scaffolding, Android scaffolding. The *emitter* logic is Arcana; the *packaging / post-processing* layer is currently Rust. |
+| WASM-GC code emission — implementations | Both Rust and Arcana exist | Two implementations are present in the repo: a Rust shim path (`gc_codegen.rs` ~1.2k LOC + `postprocessor.rs` ~6.5k LOC in `tests/verify-selfhost/src`), and an Arcana-native implementation (`src/wasm.arcana` ~7.6k LOC). Selection between them is currently a harness-level routing concern with ongoing work (see [Self-Hosting & Determinism](/pillars/self-hosting/)). Disclosed honestly rather than framed as a completed migration. |
 | Multi-target codegen — output | Shipped | Web (HTMX islands + TS backend), iOS Swift, Android Kotlin. Most recent sub-version line closed remaining mobile emitter bugs. |
-| Multi-target codegen — implementation language | Arcana (self-hosted) | All four codegen backends are pure Arcana. **WASM-GC** is `src/wasm.arcana` (~7.6k LOC), authoritative since v1.7.0 per D373 Phase 3 / WP-43 phase3-routing-flip — migrated *from* the Rust shim path (`gc_codegen.rs` ~1.2k LOC + `postprocessor.rs` ~6.5k LOC) over the v1.6.x sprint cycle. **TypeScript / Swift / Kotlin** emitters are pure Arcana: ~16.5k LOC across `ts_codegen.arcana`, `swift_codegen.arcana`, `kotlin_codegen.arcana`, RPC-client scaffolding (`emit_swift_rpc`, `emit_kotlin_rpc`), `mobile_common`, and `xcodegen`. Rust is confined to the verification harness and host-shim layer. |
-| WASM-GC Rust shim — retirement status | Deprecated; emergency-rollback only | `gc_codegen.rs` + `postprocessor.rs` are `#[deprecated(since = "1.7.0")]` and reachable only via the `--emit-shim` flag, which itself is now a no-op alias (sunset banner emits when invoked). Full deletion was scheduled v1.7.1; slipped to a later sub-version. Disclosed here rather than removed silently. |
 | Multi-target codegen — verification-harness parity | Partial | Cross-target verification through the self-hosted compiler is in phased migration. See [Self-Hosting & Determinism](/pillars/self-hosting/). |
 | RPC cross-boundary type safety | Approved, not yet implemented | HTTP+JSON RPC shipped; full client/server type-safety propagation is later-release. |
 
@@ -70,6 +71,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | OCaml bootstrap | Archived | Preserved for reference; not the active compiler. |
 | Language core verification via self-hosted path | Shipped | Type system, WASM codegen end-to-end. |
 | Verification-harness — implementation language | Rust (current) | The harness that runs `stage1=stage2` and the WASM-GC execution checks is presently a ~33k-LOC Rust toolchain (`tests/verify-selfhost`, `tests/verify-exec`, `arcana-str-ops/fuzz`). Migrating the harness into Arcana itself is the journey work below. |
+| Host ABI support crate (`arcana-str-ops`) + fuzz coverage | Rust, active | Shared string-table ABI used across the runtime and verification harness for the all-i64 string model. Locked dep set per D359 with retirement-target v1.13.1; includes a small cargo-fuzz harness (~262 LOC). |
 | Verification-harness parity across all targets | Partial / in-progress | Multi-sub-version migration; will not complete inside the current minor line. |
 
 ### [Governance & Honest Scope](/pillars/governance-honest-scope/)
@@ -84,6 +86,8 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Mirror-mode self-disclosure | Shipped | Current council process is AI-only; this is named explicitly. |
 | `KNOWN-ISSUES.md` published with release | Shipped | See [Known Issues](/honest-scope/known-issues/). |
 | Verifiable release discipline (re-executable evidence at gate) | Partial / in-progress | Multi-mechanism `make release-gate` shipped; full re-executable-evidence layer is roadmap. |
+| Release / governance enforcement scripts | Shell + Python (separate from compiler language) | The release-gate, audit, determinism-check, and policy-enforcement scripts that power the marketing-claims discipline, canary-of-canary sentinel, and synthetic-violation corpus runner are implemented in shell scripts and Python. Distinct from the compiler-implementation language; disclosed for completeness. |
+| Editor tooling — VS Code extension | Shipped, TypeScript | The Arcana VS Code language extension (~317 LOC in `editor/vscode/src/extension.ts`) is implemented in TypeScript. Developer-facing tooling, distinct from the compiler implementation. |
 
 ## On formal external security review
 
