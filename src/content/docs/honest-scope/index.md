@@ -57,6 +57,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Spin runtime sandbox | Shipped | Canonical recommendation per the security-debate decision. Other Wasmtime-compatible runtimes supported. |
 | Host runtime utilities — implementation language | Rust | The `arcana-runtime` (wasmtime + SQLite embedding core) and `arcana-serve` (HTTP shim) crates are Rust. Customer-facing surface is the Arcana program; Rust is the host-shim implementation. |
 | Multi-target codegen — output | Shipped | Web (HTMX islands + TS backend), iOS Swift, Android Kotlin. Most recent sub-version line closed remaining mobile emitter bugs. |
+| Multi-target codegen — implementation language | Arcana (self-hosted) | TypeScript / Swift / Kotlin emitters are pure Arcana: ~16.5k LOC across `ts_codegen.arcana`, `swift_codegen.arcana`, `kotlin_codegen.arcana`, RPC-client scaffolding (`emit_swift_rpc`, `emit_kotlin_rpc`), `mobile_common`, and `xcodegen`. No Rust or OCaml in the codegen path itself; Rust is confined to the verification harness and host-shim layer. |
 | Multi-target codegen — verification-harness parity | Partial | Cross-target verification through the self-hosted compiler is in phased migration. See [Self-Hosting & Determinism](/pillars/self-hosting/). |
 | RPC cross-boundary type safety | Approved, not yet implemented | HTTP+JSON RPC shipped; full client/server type-safety propagation is later-release. |
 
