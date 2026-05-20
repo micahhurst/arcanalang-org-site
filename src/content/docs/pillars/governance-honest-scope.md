@@ -15,7 +15,7 @@ Explicit non-promises — capabilities deliberately kept out of the language lay
 
 Examples: Arcana does not annotate effect reversibility at the language layer (rejected by council — reversibility lives at SDK + policy layer instead); Arcana does not detect "rubber-stamping" of effect-widening reviews at the language layer (rejected as a noun-phrase product feature); Arcana does not promise PII-handling verification before deployment (the claim is moot — no shipped surface ever made it).
 
-Each non-promise is surfaced inline at the relevant pillar with the decision-record pointer. The consolidated N-numbered record publishes alongside the v1.x complete release.
+Each non-promise is surfaced inline at the relevant pillar with the decision-record pointer. The consolidated N-numbered record publishes publicly alongside the v1.x complete release.
 
 ### 2. The current honest state
 

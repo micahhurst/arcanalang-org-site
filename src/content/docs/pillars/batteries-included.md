@@ -63,7 +63,7 @@ The companion to this pillar is a guide for AI agents on how to actually *genera
 
 ## Where this pillar stops (honest hedges)
 
-- **The effect set shipped today** covers the common-case capabilities (the canonical list is documented in the language specification, which publishes alongside the v1.x complete release). Specific effects with limited current coverage — for example, scheduled work, certain `{Monitor}` instrumentation patterns, file-system traversal cases — are honestly documented in the spec rather than hidden.
+- **The effect set shipped today** covers the common-case capabilities (the canonical list is documented in the language specification, which publishes publicly alongside the v1.x complete release). Specific effects with limited current coverage — for example, scheduled work, certain `{Monitor}` instrumentation patterns, file-system traversal cases — are honestly documented in the spec rather than hidden.
 - **Modules** as first-class language constructs (Folio for blog/CMS, marketplace primitives) are a later-release deliverable. The current closed-world layer is the stdlib + blessed libs; the *modules-as-marketplace* tier follows.
 - **Closed-world doesn't mean closed-language.** Arcana has an `Unsafe` escape hatch for FFI to native code when truly needed — but `Unsafe` is opt-in, explicit, and the compiler warns at every use site. The closed-world property holds for the safe surface, not as an absolute constraint on what's possible.
 

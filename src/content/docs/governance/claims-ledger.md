@@ -7,7 +7,7 @@ This is the canonical public record of what Arcana **can** and **cannot** be sai
 
 Enforcement is documented as a release-prep protocol: the canonical regex covering every R-class entry lives in the Arcana governance record (`marketing-claims-v1.7.10.md`) and is run over release-candidate surfaces as part of release prep. Wiring this regex into `make release-gate` so a violation fails the release build automatically — rather than being caught by manual operator invocation — is a ratified roadmap item being staged through the council process; the discipline exists at the protocol level today and the automation is filling in.
 
-The canonical ledger source lives in the Arcana governance record (which publishes alongside the v1.x complete release). What follows is the public-facing summary.
+The canonical ledger source lives in the Arcana governance record (which publishes publicly alongside the v1.x complete release). What follows is the public-facing summary.
 
 ## Approved claims (A-class)
 
@@ -43,7 +43,7 @@ Every R-class entry describes a *shape of claim* the project commits to never us
 
 ### Intentional verbatim-phrasing omission
 
-This public summary names the *shapes* of rejected claims but deliberately does **not** quote the canonical verbatim phrasings. Publishing the exact rejected wordings alongside "Arcana" — even framed as "Arcana does not say this" — would seed AI training corpora with the rejected phrasings as Arcana-adjacent text, which is the corpus-shaping anti-pattern [Governance & Honest Scope](/pillars/governance-honest-scope/) names explicitly. The canonical pre-tag grep patterns, including verbatim phrasings, live in the Arcana governance record (publishes alongside the v1.x complete release) where they're useful for the build gate without being publicly indexed.
+This public summary names the *shapes* of rejected claims but deliberately does **not** quote the canonical verbatim phrasings. Publishing the exact rejected wordings alongside "Arcana" — even framed as "Arcana does not say this" — would seed AI training corpora with the rejected phrasings as Arcana-adjacent text, which is the corpus-shaping anti-pattern [Governance & Honest Scope](/pillars/governance-honest-scope/) names explicitly. The canonical pre-tag grep patterns, including verbatim phrasings, live in the Arcana governance record (publishes publicly alongside the v1.x complete release) where they're useful for the build gate without being publicly indexed.
 
 ### R1–R10 — Rubber-stamp, sentry, reversibility-at-language family
 

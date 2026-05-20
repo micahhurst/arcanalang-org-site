@@ -26,7 +26,7 @@ The evaluator gets to reason from the signature. The compiler enforces the body 
 
 ## An admission-controlled effect vocabulary
 
-The set of effect names is a **closed, governed vocabulary**, not a free-for-all. Effects are added, retired, or rejected through a documented process with explicit admission criteria. The current set includes `{Email}`, `{SMS}`, `{CRM}`, `{Network}`, `{Database(local)}` / `{Database(server)}` / `{Database(synced)}`, `{ObjectStore(read)}` / `{ObjectStore(write)}`, `{FileSystem}`, `{Monitor}`, `{Render}` — among others (see the language specification for the full normative inventory; the public repository publishes alongside the v1.x complete release).
+The set of effect names is a **closed, governed vocabulary**, not a free-for-all. Effects are added, retired, or rejected through a documented process with explicit admission criteria. The current set includes `{Email}`, `{SMS}`, `{CRM}`, `{Network}`, `{Database(local)}` / `{Database(server)}` / `{Database(synced)}`, `{ObjectStore(read)}` / `{ObjectStore(write)}`, `{FileSystem}`, `{Monitor}`, `{Render}` — among others (see the language specification for the full normative inventory; the Arcana repository publishes publicly alongside the v1.x complete release).
 
 Separately, the codegen-target dimensions (Web · iOS · Android · Server · Edge) are tracked through an effect-availability matrix rather than as effects themselves — `{iOS}` is not an effect; iOS is a target that constrains which effects compile to it.
 

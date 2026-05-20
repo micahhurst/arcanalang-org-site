@@ -46,16 +46,16 @@ The honest phrasing: `@hermetic` is a checker contract today. Read it as "the co
 
 Two reasons:
 
-1. **It's true.** The migration is in flight, and progress is tracked publicly once the Arcana repository publishes alongside the v1.x complete release. Pretending otherwise would itself violate Arcana's marketing-claims discipline.
+1. **It's true.** The migration is in flight, and progress will be tracked publicly once the Arcana repository publishes publicly alongside the v1.x complete release. Pretending otherwise would itself violate Arcana's marketing-claims discipline.
 2. **The framing prevents a common misread.** "Self-hosted compiler" is a phrase with strong connotations (Rust, Zig — fully verified through the language's own toolchain end-to-end). Without the journey framing, a reader could over-infer that level of completion. With the journey framing, we name what's done (a lot, more than most languages at this stage) and what's not (the across-target verification-path equalization).
 
 The reader who comes back in six months finds a project that delivered against its own stated timeline, not one that redefined what it had said.
 
 ## Where to look for the canonical state
 
-- The verification suite — the canonical source of which targets have which verification stages migrated — publishes alongside the v1.x complete release.
+- The verification suite — the canonical source of which targets have which verification stages migrated — publishes publicly alongside the v1.x complete release.
 - [Honest Scope](/honest-scope/) carries the per-mechanism status — including this pillar's `@hermetic` checker-vs-codegen distinction — in one place.
-- The decisions log (which names the specific decisions phasing the harness migration) publishes alongside the v1.x complete release.
+- The decisions log (which names the specific decisions phasing the harness migration) publishes publicly alongside the v1.x complete release.
 
 ## What this pillar gives every other pillar
 

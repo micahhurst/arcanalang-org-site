@@ -43,7 +43,7 @@ The affine discipline catches a class of bugs that no amount of testing reliably
 
 Refinement types narrow a base type with a predicate that must hold at every use site. A `Username = String where len ≤ 32` is a `String` that *cannot* hold a 40-character value — the compiler enforces the predicate everywhere a `Username` is consumed, *scoped to the predicate forms currently supported by the implementation* (general-predicate refinement remains roadmap, not uniformly shipped). This catches a class of input-validation bugs at the type level rather than at runtime.
 
-The current predicate subset is documented in the language specification (which publishes alongside the v1.x complete release).
+The current predicate subset is documented in the language specification (which publishes publicly alongside the v1.x complete release).
 
 ### Compile-time data-flow / taint analysis (scoped)
 

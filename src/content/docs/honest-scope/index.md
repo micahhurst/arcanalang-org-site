@@ -81,7 +81,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Marketing-claims ledger (A-class / R-class) | Shipped | See [Claims Ledger](/governance/claims-ledger/). |
 | Decision provenance (D-numbered record) | Shipped | Searchable, citable, durable. |
 | 16-perspective council process | Shipped | Documented in `COUNCIL-PROCESS.md`. |
-| Non-promises (N-numbered record) | Shipped | Surfaced inline on the pillar pages; the N-numbered record itself publishes alongside the v1.x complete release. |
+| Non-promises (N-numbered record) | Shipped | Surfaced inline on the pillar pages; the N-numbered record itself publishes publicly alongside the v1.x complete release. |
 | Open Intentions (Not Commitments) | Shipped | See [Open Intentions](/honest-scope/open-intentions/). |
 | Mirror-mode self-disclosure | Shipped | Current council process is AI-only; this is named explicitly. |
 | `KNOWN-ISSUES.md` published with release | Shipped | See [Known Issues](/honest-scope/known-issues/). |
@@ -104,6 +104,6 @@ The only commitments are what is *shipped* and what we explicitly will *not* do 
 ## Where the rest of the story lives
 
 - [Open Intentions](/honest-scope/open-intentions/) — what we want, do not yet have, and explicitly do not promise.
-- Non-promises (what Arcana deliberately will not do) — surfaced inline on the pillar pages; the N-numbered record publishes alongside the v1.x complete release.
+- Non-promises (what Arcana deliberately will not do) — surfaced inline on the pillar pages; the N-numbered record publishes publicly alongside the v1.x complete release.
 - [Known Issues](/honest-scope/known-issues/) — the at-release-time disclosure of current process and implementation limitations.
 - [Claims Ledger](/governance/claims-ledger/) — the A-class approved / R-class rejected ledger that the pre-tag grep enforces.
