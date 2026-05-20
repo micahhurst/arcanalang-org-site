@@ -1,6 +1,6 @@
 ---
 title: Marketing-Claims Ledger
-description: Every claim Arcana makes externally is explicitly approved (A-class) or explicitly rejected (R-class). The pre-tag grep enforces the rejections at every release.
+description: A pre-tag grep is the manual release-prep step that catches rejections; automated wire-up is committed for v1.7.8 (D482). Note: this description previously stated automated enforcement; corrected 2026-05-19 — see D482.
 ---
 
 This is the canonical public record of what Arcana **can** and **cannot** be said to do. Every claim that appears on this site, in articles, in conversations, or in social posts is either explicitly *approved* (an A-class claim that carries a scope hedge) or explicitly *rejected* (an R-class entry the project commits to never using, even in negation).
@@ -33,13 +33,13 @@ Backed by: the council decision rejecting reversibility-at-language-layer (P4, u
 
 ### A7 — Hedge-adjacency discipline (meta-claim)
 
-This isn't a claim about Arcana; it's a claim about how Arcana's claims are written. **Every safety claim's scope hedge must be same-sentence or same-line as the claim, never in a footnote.** A claim with a footnote-mounted hedge is flagged as A7-non-compliant and fails the release gate.
+This isn't a claim about Arcana; it's a claim about how Arcana's claims are written. **Every safety claim's scope hedge must be same-sentence or same-line as the claim, never in a footnote.** A claim with a footnote-mounted hedge is A7-non-compliant. Release engineers must catch and correct A7 violations during release prep; automated A7 wire-up is tracked separately (see governance/audit-reports/ open issues) — the v1.7.8 R-class wire-up (D482) is independent.
 
 This page itself is subject to A7. Every approved claim above carries its scope hedge in the same paragraph.
 
 ## Rejected claims (R-class)
 
-Every R-class entry describes a *shape of claim* the project commits to never using — *even in negation*. The pre-tag grep matches these shapes and fails the release build.
+Every R-class entry describes a *shape of claim* the project commits to never using — *even in negation*. The pre-tag grep matches these shapes; release engineers run it manually during release prep and block ship on any hit. Automated wire-up into `make release-gate` is committed for v1.7.8 (D482).
 
 ### Intentional verbatim-phrasing omission
 
@@ -76,7 +76,7 @@ Used as a declarative fact, this shape is rejected. The approved framing names i
 
 A `git grep` pattern (the **pre-tag grep**) covers every R-class entry. The pattern itself — including the canonical verbatim phrasings it matches — lives in the Arcana governance record (`marketing-claims-v1.7.10.md`, which publishes publicly alongside the v1.x complete release). The grep is currently run as a release-prep protocol step rather than as an automated gate in `make release-gate`; wiring it into the automated gate is a ratified roadmap item being staged through the council process. Adding new R-class entries requires updating the regex *in the same commit* that ratifies the rejection.
 
-This is what makes the ledger discipline structural rather than aspirational. The grep is the gate.
+This is what makes the ledger discipline structural rather than aspirational. The grep is the gate (manually invoked at release prep; automation committed for v1.7.8 per D482).
 
 ## Why the discipline matters
 

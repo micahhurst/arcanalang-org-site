@@ -85,7 +85,7 @@ Each mechanism named on the pillar pages carries a status here. Statuses use fou
 | Open Intentions (Not Commitments) | Shipped | See [Open Intentions](/honest-scope/open-intentions/). |
 | Mirror-mode self-disclosure | Shipped | Current council process is AI-only; this is named explicitly. |
 | `KNOWN-ISSUES.md` published with release | Shipped | See [Known Issues](/honest-scope/known-issues/). |
-| Verifiable release discipline (re-executable evidence at gate) | Partial / in-progress | Multi-mechanism `make release-gate` shipped; full re-executable-evidence layer is roadmap. |
+| Verifiable release discipline (re-executable evidence at gate) | Partial / in-progress | Multi-mechanism `make release-gate` shipped. **v1.7.8 — partial delivery via D482 (R-class pre-tag grep wired into `make release-gate` with a per-R-entry canary corpus); broader verifiable-evidence-at-the-gate work remains as ongoing pillar.** |
 | Release / governance enforcement scripts | Shell + Python (separate from compiler language) | The release-gate, audit, determinism-check, and policy-enforcement scripts that power the marketing-claims discipline, canary-of-canary sentinel, and synthetic-violation corpus runner are implemented in shell scripts and Python. Distinct from the compiler-implementation language; disclosed for completeness. |
 | Editor tooling — VS Code extension | Shipped, TypeScript | The Arcana VS Code language extension (~317 LOC in `editor/vscode/src/extension.ts`) is implemented in TypeScript. Developer-facing tooling, distinct from the compiler implementation. |
 
