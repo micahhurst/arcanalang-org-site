@@ -1,6 +1,6 @@
 ---
 title: Marketing-Claims Ledger
-description: A pre-tag grep is the manual release-prep step that catches rejections; automated wire-up is committed for v1.7.8 (D482). Note: this description previously stated automated enforcement; corrected 2026-05-19 — see D482.
+description: "A pre-tag grep is the manual release-prep step that catches rejections; automated wire-up is committed for v1.7.8 (D482). Note: this description previously stated automated enforcement; corrected 2026-05-19 — see D482."
 ---
 
 This is the canonical public record of what Arcana **can** and **cannot** be said to do. Every claim that appears on this site, in articles, in conversations, or in social posts is either explicitly *approved* (an A-class claim that carries a scope hedge) or explicitly *rejected* (an R-class entry the project commits to never using, even in negation).
