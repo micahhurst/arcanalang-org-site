@@ -139,7 +139,7 @@ Asserting the thesis without naming the missing empirical validation would be ex
 
 ### What it is
 
-The release gate is `make release-gate`, a multi-mechanism check covering substantive items: spec ambiguity sweep, effect-soundness fuzzing, codegen golden tests, security review, messaging calibration, this KNOWN-ISSUES disclosure, and response readiness.
+The release gate has two halves that run alongside each other. The Makefile target `make release-gate` runs a battery of **automated** checks (covering items such as spec-impl symmetry, effect-soundness fuzzing, must-work coverage, codegen golden tests, stub-surface auditing, and similar mechanism-driven items). A parallel **release-prep checklist** covers manual items that the automation does not yet cover — security review, marketing-claims discipline (the pre-tag grep for R-class rejections; D482 commits its `make release-gate` wire-up for v1.7.8), messaging calibration, this KNOWN-ISSUES disclosure check, and response readiness review — that release engineers verify by inspection. The combination is what we mean by "the release gate"; the line between automated and manual is named honestly here rather than blurred, in line with D482's anti-protocol-rot clause.
 
 ### Current honest state
 
@@ -193,7 +193,7 @@ Codegen golden-test recovery is an active phased work item. Each release ships a
 
 ### What it is
 
-This publication is **spec-first**: language specification, design decisions, governance record, marketing-claims ledger. The compiler source and binary are not in this publication.
+This publication is **spec-first**: language specification, design decisions, governance record, marketing-claims ledger. The compiler source and binary already exist in the (currently private) Arcana repository and publish publicly alongside the v1.x complete release; they are not on this website today.
 
 ### Current honest state
 
