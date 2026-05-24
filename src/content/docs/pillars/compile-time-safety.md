@@ -13,6 +13,10 @@ The premise: side effects and resource discipline are enforced by the type syste
 
 Every function declares the side effects it performs. Effects are first-class citizens of the type system — they appear in function signatures, they propagate through call chains, and they're drawn from a closed, governed vocabulary (effects are added, retired, or rejected through a documented process, not invented ad-hoc).
 
+:::note[Code samples below are the human view]
+Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
+:::
+
 ```arcana
 // From the spec: Database + observability effects declared in signature
 fn getUser(id: UserId) -> {Database, Monitor} Option<User> {

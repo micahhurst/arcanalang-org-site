@@ -21,6 +21,10 @@ For server-side execution, the **shipped implementation** is a custom Wasmtime-b
 
 What this gives the safety story in practice:
 
+:::note[Code samples below are the human view]
+Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
+:::
+
 ```arcana
 // {Database(local)} is the v0.7+ parameterized form — SQLite, synchronous.
 // {Database(server)} would be Postgres, async (requires await).

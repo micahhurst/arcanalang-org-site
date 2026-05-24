@@ -14,6 +14,10 @@ These properties reinforce each other: the productivity gain *comes from* the cl
 
 ## First-class effect capabilities
 
+:::note[Code samples below are the human view]
+Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
+:::
+
 ```arcana
 // From the spec: effect-as-contract pattern
 fn sendEmail(to: Email, body: Html) -> {Email, Server} Unit {

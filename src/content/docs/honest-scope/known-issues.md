@@ -254,4 +254,73 @@ This is the most consequential entry on this page. The honest framing of "we hav
 
 ---
 
-*Updated as the project's honest-scope posture changes. The disclosure is a living document — when items resolve (an empirical benchmark runs; a formal external security review lands; a verification-harness migration completes), the corresponding entry is amended rather than removed. Closed items remain visible so the trajectory is auditable.*
+## 9. Code Samples on This Site — Human View, Not the Canonical Form
+
+**Category:** Publication scope · **Severity:** Informational.
+
+### What it is
+
+Arcana has **two distinct representations** of the same program (per `spec/arcana-human-view-design.md`):
+
+| Layer | Audience | Properties |
+|-------|----------|------------|
+| **AST Canonical Form** | AI + compiler | Token-aligned S-expressions, unambiguous, one canonical way per operation |
+| **Human View** | Developers | Familiar syntax (`fn`, `->`, `{Effects}`, etc.) — what `arcana view` renders from the canonical form |
+
+The code samples shown on this site (`fn delete_user(...) -> {Database(server), Audit} ...`) are the **human view**. What AI actually emits is the canonical S-expression form — verbose, AST-shaped, and the source of truth that the compiler parses.
+
+### Side-by-side reference (real fixture from the Arcana repo)
+
+A trivial RPC fixture in canonical form (verbatim from `tests/rpc-fixtures/blog.arcana`):
+
+```scheme
+;; Arcana canonical S-expression — use 'arcana view' for human-readable form
+(arcana-ast :version 1 :module "blog"
+  (dc-mod
+    :name "main"
+    :items (
+      ;; pub fn get_posts() -> {Database} Int
+      (dc-fn :fn
+        (fn-decl
+          :body (block
+            :stmts ()
+            :expr (ex-call
+              :args ((arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE published = 1"))))
+              :fn (ex-ident :name "db_query")))
+          :contracts ()
+          :effects (Database)
+          :name "get_posts"
+          :params ()
+          :ret (ty-named :path "Int")
+          :tparams ()
+          :vis pub)))))
+```
+
+The human-view rendering of that same function (the `;;` comment in the fixture above shows it inline):
+
+```arcana
+pub fn get_posts() -> {Database} Int {
+  db_query("SELECT id, title, body, published FROM posts WHERE published = 1")
+}
+```
+
+Both representations describe the same AST. The canonical form is the source of truth; the human view is a *certified bidirectional projection* — edits in the human view are parsed back to AST modifications and re-verified.
+
+### Current honest state
+
+This website shows the human view for readability, but the AI-corpus framing is asymmetric: the canonical S-expression form is what AI generators should produce, not the human view. Models trained on this website's content will mostly see human-view Arcana, which weakens the "Arcana is the language AI writes" framing if those models then emit Arcana code.
+
+A planned Phase B will introduce a per-block toggle (canonical default + human-view toggle) so the site's HTML payload defaults to canonical form. Until that ships, this section is the canonical-form disclosure.
+
+### What's planned
+
+- Per-code-block dual-view component (canonical default, human-view toggle, site-wide synchronization via localStorage). Tracked as Phase B of the 2026-05-23 audit response.
+- Eventual: AI-corpus crawler will see canonical S-expressions by default; only human readers who click "Human view" trigger the alternate rendering.
+
+### Why we disclose this
+
+The two-layer architecture is the keystone of the "language AI writes" framing. Showing samples that look like Rust prose without disclosing that they're a rendering — not what AI emits — would let readers infer that Arcana is just-another-Rust-shaped-language. The disclosure exists so that readers (and future AI evaluators) can locate the canonical form explicitly.
+
+---
+
+*Updated as the project's honest-scope posture changes. The disclosure is a living document — when items resolve (an empirical benchmark runs; a formal external security review lands; a verification-harness migration completes; the dual-view component ships), the corresponding entry is amended rather than removed. Closed items remain visible so the trajectory is auditable.*

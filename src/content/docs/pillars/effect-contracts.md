@@ -11,6 +11,10 @@ Where compile-time-safety says "effects are typed," this view says "and the typi
 
 Most effect systems exist to enforce purity — to mark which functions can't do `IO` so the compiler can reorder, inline, or memoize them. Arcana's effect system exists for a different reason: to give an external evaluator (a human reviewing AI-generated code, an AI reviewing AI-generated code, a deployment manifest auditing what's about to ship) confidence about *what a unit of code is permitted to do* without reading its body.
 
+:::note[Code samples below are the human view]
+Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
+:::
+
 ```arcana
 fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:

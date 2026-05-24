@@ -23,6 +23,10 @@ This isn't a developer-experience regression. It's the structural reason a typos
 
 In a generic language, the only way to know what a function does is to read its body — or to trust the docs match. In Arcana, every function declares its side effects in the signature, drawn from a closed and governed vocabulary:
 
+:::note[Code samples below are the human view]
+Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
+:::
+
 ```arcana
 fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:
