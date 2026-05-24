@@ -22,6 +22,9 @@ For server-side execution, the **shipped implementation** is a custom Wasmtime-b
 What this gives the safety story in practice:
 
 ```arcana
+// {Database(local)} is the v0.7+ parameterized form — SQLite, synchronous.
+// {Database(server)} would be Postgres, async (requires await).
+// {Database(synced)} would be local + server with background sync.
 fn quotes_endpoint() -> {Network, Database(local)} Result<Json, Error> {
   // compile-time: this function declared {Network, Database(local)}.
   // run-time (Spin sandbox): the deployed component is granted exactly
@@ -47,17 +50,24 @@ The same Arcana source compiles to multiple frontend / mobile targets:
 - **Android**: Kotlin output, integrated with platform UI primitives.
 
 ```arcana
-// One source declaration:
-page user_profile {
-  layout {
-    header(text = user.name)
-    button(action = follow, label = "Follow")
-  }
+// From the spec: page handler with type-safe query + render. One source.
+page "/users/:id" {
+  user = User.find(id)       // type-safe query
+  render UserProfile(user)   // type-safe template
+}
+
+component UserProfile(user: User) -> {Server} Html {
+  <div padding={4} bg={gray.50} rounded={lg}>
+    <h1 font_size={xl} font_weight={bold}>{user.name}</h1>
+    <p color={gray.600}>{user.email}</p>
+    <PostList posts={user.posts} />
+  </div>
 }
 // Compiles to:
 //   - web/HTMX island + TS handler
 //   - iOS SwiftUI view + action handler
 //   - Android Compose composable + action handler
+// Each target's codegen emits the platform-native idiom.
 ```
 
 Cross-platform UI primitives are declared once. The codegen layer translates to each target's native idioms (SwiftUI on iOS, Jetpack Compose on Android, HTMX/web on browser). A custom UI primitive must implement all platforms — an admission-controlled discipline that prevents single-target "drift" from showing up at deploy time as a missing platform.

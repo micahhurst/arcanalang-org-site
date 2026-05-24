@@ -24,11 +24,13 @@ This isn't a developer-experience regression. It's the structural reason a typos
 In a generic language, the only way to know what a function does is to read its body — or to trust the docs match. In Arcana, every function declares its side effects in the signature, drawn from a closed and governed vocabulary:
 
 ```arcana
-fn delete_user(id: UserId) -> {Database(server), Monitor} Result<Unit, Error> {
+fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:
   //   - send email (no {Email} declared)
   //   - call the network (no {Network} declared)
   //   - write to the filesystem (no {FileSystem} declared)
+  // {Audit} is the v1.4 audit-trail effect (D231); deletion records to the
+  // audit log without granting any other capability.
 }
 ```
 
@@ -39,9 +41,14 @@ A reviewer — human or AI — can reason about *what a unit of generated code i
 A resource handle — a database connection, a file handle, an HTTP response — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host.
 
 ```arcana
-let conn = db_connect()
-let a = query(conn, ...)
-let b = query(conn, ...)   // compile error: 'conn' used after move
+fn process_order(conn: DbConnection) -> {Database} Order {
+  let tx = conn.begin()      // conn consumed, tx created
+  let order = tx.insert(Order { ... })
+  tx.commit()                // tx consumed — cannot use again
+  order
+}
+// Attempting `tx.insert(...)` after `tx.commit()` is an E6010
+// [AFFINE-USE-AFTER-MOVE] error at compile time.
 ```
 
 This catches a category of bug that no amount of generator-testing reliably catches in mainstream languages: forgotten close, double-close, leaked connection on an error path. The compiler refuses to emit the program.

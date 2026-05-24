@@ -12,13 +12,15 @@ Where compile-time-safety says "effects are typed," this view says "and the typi
 Most effect systems exist to enforce purity — to mark which functions can't do `IO` so the compiler can reorder, inline, or memoize them. Arcana's effect system exists for a different reason: to give an external evaluator (a human reviewing AI-generated code, an AI reviewing AI-generated code, a deployment manifest auditing what's about to ship) confidence about *what a unit of code is permitted to do* without reading its body.
 
 ```arcana
-fn delete_user(id: UserId) -> {Database(server), Monitor} Result<Unit, Error> {
+fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error> {
   // The signature is the contract. Whatever this body does, it cannot:
   //   - send email (no {Email} declared)
   //   - call out to the network (no {Network} declared)
   //   - write to the filesystem (no {FileSystem} declared)
   //   - perform any other effect not listed above
-  // …
+  // {Audit} is the audit-trail effect (D231, v1.4) — the deletion is
+  // recorded in the audit trail; {Monitor} (observability) would be
+  // separate if telemetry were also needed.
 }
 ```
 

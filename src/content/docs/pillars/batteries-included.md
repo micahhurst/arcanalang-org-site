@@ -15,12 +15,11 @@ These properties reinforce each other: the productivity gain *comes from* the cl
 ## First-class effect capabilities
 
 ```arcana
-fn welcome(user: User) -> {Email, Monitor} Result<Unit, Error> {
-  log_info("welcome path", user_id = user.id)        // {Monitor}
-  email.send(user.address,
-             template = "welcome",
-             vars = { name: user.name })             // {Email}
-  Ok(())
+// From the spec: effect-as-contract pattern
+fn sendEmail(to: Email, body: Html) -> {Email, Server} Unit {
+  // The {Email} effect contract is the SDK-configured implementation.
+  // No SendGrid SDK call, no .env API key threading, no DI wiring.
+  // The AI writes the contract; the platform supplies the implementation.
 }
 ```
 
@@ -31,11 +30,13 @@ No SendGrid SDK. No configured API key threaded through dependency injection. No
 One declaration becomes types, SQL, and validation:
 
 ```arcana
+// From the spec: schema declaration with refinement-typed fields
 schema User {
-  id:    UserId        // refinement-typed, validated
-  name:  Username      // String where len ≤ 32
-  email: Email
-  joined: DateTime
+  id:    UserId(auto_increment)
+  name:  String(max: 100)
+  email: Email(unique: true)
+  role:  Role = .member
+  posts: [Post]
 }
 ```
 

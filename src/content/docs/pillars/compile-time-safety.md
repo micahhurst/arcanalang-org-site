@@ -14,15 +14,15 @@ The premise: side effects and resource discipline are enforced by the type syste
 Every function declares the side effects it performs. Effects are first-class citizens of the type system — they appear in function signatures, they propagate through call chains, and they're drawn from a closed, governed vocabulary (effects are added, retired, or rejected through a documented process, not invented ad-hoc).
 
 ```arcana
-fn send_welcome(user: User) -> {Email, Database} Result<Unit, Error> {
-  // permitted: this function declared {Email} and {Database}
-  db.upsert(user)
-  email.send(user.address, "welcome")
+// From the spec: Database + observability effects declared in signature
+fn getUser(id: UserId) -> {Database, Monitor} Option<User> {
+  log("Fetching user #{id}")                  // {Monitor}
+  query User where id == id |> first          // {Database}
 }
 
-fn pure_calc(x: Int) -> Int {
-  email.send(...)        // {Email} not declared in this signature
-}                        // → compile error: undeclared effect {Email}
+// Pure function — no effects declared. Calling an effectful function
+// from here is a compile error: the declared effect row is empty.
+fn add(a: Int, b: Int) -> Int { a + b }
 ```
 
 This is what gives an evaluator — a human reader, an AI reviewer, a deployment manifest — confidence about *what a unit of generated code is permitted to do* without reading its body. The effect row is the contract.
@@ -32,9 +32,15 @@ This is what gives an evaluator — a human reader, an AI reviewer, a deployment
 A resource handle — a database connection, a file handle, an open HTTP response, an API session — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host runtime — those remain the host's responsibility.
 
 ```arcana
-let conn = db_connect()
-let a = query(conn, ...)
-let b = query(conn, ...)   // → compile error: affine value 'conn' used after move
+// From the spec: affine consume-then-drop pattern
+fn process_order(conn: DbConnection) -> {Database} Order {
+  let tx = conn.begin()      // conn consumed, tx created
+  let order = tx.insert(Order { ... })
+  tx.commit()                // tx consumed — cannot use again
+  order
+}
+// conn and tx are automatically cleaned up — compiler enforces affine Drop at scope exit.
+// Attempting `tx.insert(...)` after `tx.commit()` is an E6010 [AFFINE-USE-AFTER-MOVE] error.
 ```
 
 The affine discipline catches a class of bugs that no amount of testing reliably catches in mainstream languages: forgotten close, double-close, leaked connection on an error path. The compiler refuses to emit the program.
@@ -50,10 +56,12 @@ The current predicate subset is documented in the language specification (which 
 Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time *within the coverage map documented in the spec* — sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection, and the rest of the named gap list below) still require explicit `@sanitizer` annotations or runtime sanitization at the boundary. (Throughout this page, **WP-#** refers to a numbered Work Package in the Arcana language specification; **D#** to a numbered design decision in the project's public decision record.)
 
 ```arcana
-fn render_user(input: String) -> {Render} Html {
-  html"""<script>${input}</script>"""
+// From the spec gate-corpus: synthetic-violation that MUST emit E2020
+@should_not_compile(tier: SEMANTICS, code: E2020)
+pub fn render_user_name(name: String) -> Html {
+    html"<div>{name}</div>"  // unescaped interpolation — XSS surface
 }
-// → E2020: XSS marker '<script' detected in render output
+// → E2020: XSS marker detected in render output
 // (Scoped: substring match against canonical markers; HTML-entity-encoded
 //  and other sophisticated variants are NOT caught at this layer — see
 //  WP-34 §7.1 for the current coverage map and disclosed gaps.)
