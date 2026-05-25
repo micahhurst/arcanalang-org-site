@@ -322,9 +322,10 @@ The 16P UNBUNDLED council (R1→R2→R3 16/16 BARE PASS unanimous, founder-ratif
 - The pairing must be fixture-anchored (canonical extracted verbatim from real Arcana repo fixtures) to avoid seeding AI training corpora with invented canonical forms.
 - Hand-derived canonical is treated as **provisional** and not fed to corpus-shaping outputs.
 
-**As of 2026-05-25, the per-block toggle is live on three samples where verified fixture-anchored pairs exist**:
+**As of 2026-05-25, the per-block toggle is live on four samples where verified fixture-anchored pairs exist**:
 
 - *Effect-as-contract* on the [Batteries-Included pillar](/pillars/batteries-included/) — sourced from `tests/rpc-fixtures/blog.arcana` (`get_posts`).
+- *Schema-as-types* on the [Batteries-Included pillar](/pillars/batteries-included/) — sourced from `tests/v175-c2/fixtures/dc-schema.arcana` (`Evt`).
 - *Affine consume-then-drop* on the [Compile-Time Safety pillar](/pillars/compile-time-safety/) — sourced from `tests/v1.5-validation/1a_double_use.arcana` (`double_use`).
 - *Affine consume-then-drop* on the [We didn't build a language for humans to write](/writing/we-didnt-build-a-language-for-humans-to-write/) article — same fixture as above.
 

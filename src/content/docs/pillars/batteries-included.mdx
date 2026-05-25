@@ -51,26 +51,48 @@ The `{Database}` declared in the function's effect row is the contract: the func
 
 ## Schema-as-types
 
-One declaration becomes types, SQL, and validation:
+One declaration becomes types, SQL, and validation. Below is `Evt`, a real verified `dc-schema` fixture from `tests/v175-c2/fixtures/dc-schema.arcana` — the canonical AST node `dc-schema` is the source-of-truth form; the human view is the projection.
 
-```arcana
-// From the spec: schema declaration with refinement-typed fields
-schema User {
-  id:    UserId(auto_increment)
-  name:  String(max: 100)
-  email: Email(unique: true)
-  role:  Role = .member
-  posts: [Post]
-}
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; v1.7.5 C2 §7.1/§7.2/§7.4 fixture: dc-schema leaf lowering.
+(arcana-ast :version 1 :module "dc_schema"
+  (dc-mod
+    :name "main"
+    :items (
+      (dc-schema
+        :fields (
+          (field-decl :name "id" :type (ty-named :path "Int") :vis pub)
+          (field-decl :name "name" :type (ty-named :path "String") :vis pub)
+          (field-decl :name "active" :type (ty-named :path "Bool") :vis pub))
+        :mode "server"
+        :name "Evt"
+        :tparams ()
+        :vis pub))))
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub schema Evt {
+  pub id:     Int
+  pub name:   String
+  pub active: Bool
+}
+// :mode "server" → server-mapped (the schema's Database parameterization
+// is the same one declared in function effect rows as Database(server)).
+```
+  </TabItem>
+</Tabs>
 
-This single declaration produces:
+A single `dc-schema` declaration produces:
+
 - The Arcana type (used in function signatures)
-- The SQL `CREATE TABLE` (and migrations)
+- The SQL `CREATE TABLE` (and migrations) when `:mode "server"`
 - The input validation at every boundary (form submission, API ingestion)
 - The serialization shape
 
-Because there's no drift surface — one declaration, multiple derivatives — there's no opportunity for a generator to get the Arcana type right while accidentally producing a SQL schema that allows null where the type forbids it. This is covered in detail in [Compile-Time Safety](/pillars/compile-time-safety/) as the "schema-as-types" mechanism; it appears in this pillar because the *practical* effect is "batteries included for data modeling," not just a type-system convenience.
+Because there's no drift surface — one declaration, multiple derivatives — there's no opportunity for a generator to get the Arcana type right while accidentally producing a SQL schema that allows null where the type forbids it. The fixture above uses simple `Int`/`String`/`Bool` types; the *refinement-typed* field forms (`String(max: 100)`, `Email(unique: true)`, default values like `Role = .member`, list types `[Post]`) are detailed under "Refinement types" on [Compile-Time Safety](/pillars/compile-time-safety/). The mechanism appears in this pillar because the *practical* effect is "batteries included for data modeling," not just a type-system convenience.
 
 ## The closed-world stdlib
 
