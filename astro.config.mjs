@@ -45,11 +45,13 @@ export default defineConfig({
 				// Sidebar autogenerates from each section directory as content lands.
 				// 12-page MVP structure:
 				//   Pillars (6) — /pillars/{compile-time-safety,effect-contracts,batteries-included,runtime,self-hosting,governance-honest-scope}/
+				//   Reading Arcana — single-page section explaining canonical/human-view dual display.
 				//   Writing — /writing/* (Day-1 launch article + cadence)
 				//   Honest Scope — /honest-scope/{index,open-intentions,non-promises,decay-modes,known-issues}/
 				//   Governance — /governance/{claims-ledger,council-process,decisions}/
 				//   Top-level: glossary, origin, for-ai-agents.
 				{ label: 'Pillars', items: [{ autogenerate: { directory: 'pillars' } }] },
+				{ label: 'Reading Arcana', link: '/reading-arcana/' },
 				{ label: 'Writing', items: [{ autogenerate: { directory: 'writing' } }] },
 				{ label: 'Honest Scope', items: [{ autogenerate: { directory: 'honest-scope' } }] },
 				{ label: 'Governance', items: [{ autogenerate: { directory: 'governance' } }] },

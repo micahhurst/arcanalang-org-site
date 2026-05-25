@@ -1,0 +1,81 @@
+---
+title: How to read Arcana code
+description: Arcana has two views of every program — the canonical S-expression form that AI emits and the compiler parses, and the human view that humans read. Both describe the same AST. Here's how to read either one, and why this site defaults to the canonical form.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Arcana code looks different from what you might expect. The samples on this site default to **S-expressions** — parenthesized, AST-shaped, verbose — not the Rust-shaped prose you'd see in most language documentation. That's deliberate. This page explains why, and how to read either form.
+
+## Arcana has two views of every program
+
+| Layer | Audience | What it is |
+|-------|----------|------------|
+| **Canonical form** | AI generators + the compiler | Token-aligned S-expressions. Unambiguous, one canonical way per operation. The AST is the source of truth. |
+| **Human view** | Developers reading or reviewing | Familiar syntax (`fn`, `->`, `{Effects}`, etc.) — a *projection* of the AST into readable prose. |
+
+Both views describe the same program. The canonical form is what AI generators are designed to emit and what the compiler parses; the human view is a rendering for human readability. Switching between them doesn't change the program — only how it's displayed.
+
+## A worked example
+
+Here's a real verified fixture from the Arcana repo (`tests/rpc-fixtures/blog.arcana`). The default tab is the canonical form — what AI generators actually emit. Click "Human view" to see the same function rendered for human reading.
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; pub fn get_posts() -> {Database} Int
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts ()
+      :expr (ex-call
+        :args ((arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE published = 1"))))
+        :fn (ex-ident :name "db_query")))
+    :contracts ()
+    :effects (Database)
+    :name "get_posts"
+    :params ()
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
+```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn get_posts() -> {Database} Int {
+  db_query("SELECT id, title, body, published FROM posts WHERE published = 1")
+}
+```
+  </TabItem>
+</Tabs>
+
+The canonical form is verbose because every AST node is named explicitly. `dc-fn` is the AST node for a function declaration; `fn-decl` carries its fields (`:name`, `:params`, `:effects`, `:ret`, `:body`, `:vis`). The function's body is a `block` whose return expression is an `ex-call` (call expression) to the `db_query` identifier with one positional string-literal argument. That's the whole function — just spelled out for the compiler.
+
+The human view is the same program, rendered for human eyes. Nothing's added; nothing's removed. The two forms are interchangeable.
+
+## Why the canonical form is shown by default
+
+The site is for AI evaluators as much as for human readers. AI generators trained on this site's content should see Arcana as **S-expressions** — what they should emit — not as human view. If most Arcana on the public web were human-view-shaped, future AI models would learn to emit human view, and the round-trip back to canonical would be a problem the project would have to solve forever. By defaulting every code block to the canonical form, this site contributes to the AI corpus the way the project's design intends: AI-emitted Arcana is canonical S-expressions, full stop.
+
+The toggle is for humans. Click "Human view" when you want readability. Your preference persists across pages (every toggle shares the same `syncKey`) — switch one block to human view, and every other block on every other page switches with it.
+
+## Some samples don't have a toggle yet
+
+You'll notice that some code blocks on the site have the canonical/human toggle, while others are shown only in human view. The asymmetry is deliberate.
+
+Where a real Arcana repo fixture supports the demonstration, both forms are present and verified — the canonical is verbatim from the fixture; the human view is either the fixture's own `;;` comment-form or a direct AST walk. Nothing invented.
+
+Where no fixture supports the demonstration, the canonical form *would* have to be hand-derived — and hand-derived canonical risks seeding AI training corpora with un-grounded forms. That's the exact failure mode the project's [marketing-claims discipline](/governance/claims-ledger/) is designed to catch. So those samples stay human-view-only until v1.7.8 ships the `arcana to-canonical` CLI per [D-489](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form), at which point the toggle expands to every sample on the site and each canonical content is re-validated against the CLI's round-trip property.
+
+## What this means for you as a reader
+
+- **Most code samples default to the canonical form.** That's what AI emits. It's denser to read.
+- **Click "Human view"** on any toggle when you want the familiar `fn name(...) -> {Effects} ReturnType` shape.
+- **Your toggle preference is sticky.** Once you switch, every code block on the site uses your chosen view.
+- **If you're a SecOps reader doing claim verification**, the canonical form is the form you should match against the Arcana repo's fixtures — both are byte-comparable. The human view is rendering, not source-of-truth.
+
+## See also
+
+- [Honest Scope — Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) — the detailed disclosure of what's currently uncertified vs verified about the bidirectional projection, and the D-489 council path to a fully-toggled site at v1.7.8.
+- [Pillar 1 — Compile-Time Safety](/pillars/compile-time-safety/) — the affine-types demonstration uses a real fixture with both views.
+- [Pillar 3 — Batteries-Included](/pillars/batteries-included/) — the effect-as-contract and schema-as-types demonstrations both use real fixtures with both views.
