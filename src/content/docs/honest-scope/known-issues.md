@@ -304,13 +304,27 @@ pub fn get_posts() -> {Database} Int {
 }
 ```
 
-Both representations describe the same AST. The canonical form is the source of truth; the human view is a *certified bidirectional projection* — edits in the human view are parsed back to AST modifications and re-verified.
+Both representations describe the same AST. The canonical form is the source of truth; in the design's terms, the human view is a *certified bidirectional projection* — though the certification itself is currently a future-tense claim (see "Current honest state" below).
 
 ### Current honest state
 
 This website shows the human view for readability, but the AI-corpus framing is asymmetric: the canonical S-expression form is what AI generators should produce, not the human view. Models trained on this website's content will mostly see human-view Arcana, which weakens the "Arcana is the language AI writes" framing if those models then emit Arcana code.
 
-A planned Phase B will introduce a per-block toggle (canonical default + human-view toggle) so the site's HTML payload defaults to canonical form. Until that ships, this section is the canonical-form disclosure.
+**Bidirectional-projection mechanism status (2026-05-24 council finding, D-489)**: the "certified bidirectional projection" claim asserted in `spec/arcana-human-view-design.md` §1.1 is **currently unbacked at HEAD in both directions** of the projection:
+
+- The canonical→human renderer (`arcana view` / `do_view`) is a v1.4.1 passthrough stub that prints source unchanged.
+- The human→canonical parser (`parseable_view.serialize_program`) is undefined; `edit.text_to_sexp` returns an `Err("cross-module: parse_string")` stub.
+- `arcana migrate` is legacy v0.3–v0.5 text only, destructive in-place, with `--verify` as a no-op — not a substitute.
+
+The 16P UNBUNDLED council (R1→R2→R3 16/16 BARE PASS unanimous, founder-ratified 2026-05-24) ratified **D-489: build the human-view↔canonical bidirectional engine in Arcana and ship `arcana to-canonical`** as part of v1.7.8. The §1.1 spec claim is preserved but now carries an interim-status note honoring this finding. Until v1.7.8 ships:
+
+- Hand-derived canonical paired with hand-rendered human view is the only available approach for this website's dual-view work.
+- The pairing must be fixture-anchored (canonical extracted verbatim from real Arcana repo fixtures) to avoid seeding AI training corpora with invented canonical forms.
+- Hand-derived canonical is treated as **provisional** and not fed to corpus-shaping outputs.
+
+A planned Phase B will introduce a per-block toggle (canonical default + human-view toggle) on samples where fixture-anchored pairs are available. Once v1.7.8 ships `arcana to-canonical`, the toggle expands to all samples and the canonical content is re-validated via the CLI's round-trip property: `arcana view (arcana to-canonical INPUT) == INPUT` (modulo normalization).
+
+**AI primary-path boundary (D-489 mandate)**: `arcana to-canonical` (once shipped) is **for human authors and one-time tooling**, not the AI primary path. AI generators emit canonical via the conversation/generation context directly. The CLI exists to lower friction for human-authored docs / migration tooling; it is not a license to make the corpus more human-view-shaped.
 
 ### What's planned
 
