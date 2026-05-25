@@ -3,6 +3,8 @@ title: Compile-Time Safety
 description: The irreducible pillar — effect system, affine resource types, refinement types, and scoped data-flow analysis. The foundation every other pillar rests on.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 Compile-time safety is Arcana's irreducible core. Every other pillar — effect contracts, batteries-included capabilities, the portable runtime, self-hosting, governance — rests on what the type system can statically prove *before code runs*.
 
 The premise: side effects and resource discipline are enforced by the type system, not by convention. If a generator (human or AI) writes code that would violate a declared safety constraint, the compiler rejects it before the code reaches the runtime.
@@ -35,17 +37,46 @@ This is what gives an evaluator — a human reader, an AI reviewer, a deployment
 
 A resource handle — a database connection, a file handle, an open HTTP response, an API session — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host runtime — those remain the host's responsibility.
 
-```arcana
-// From the spec: affine consume-then-drop pattern
-fn process_order(conn: DbConnection) -> {Database} Order {
-  let tx = conn.begin()      // conn consumed, tx created
-  let order = tx.insert(Order { ... })
-  tx.commit()                // tx consumed — cannot use again
-  order
-}
-// conn and tx are automatically cleaned up — compiler enforces affine Drop at scope exit.
-// Attempting `tx.insert(...)` after `tx.commit()` is an E6010 [AFFINE-USE-AFTER-MOVE] error.
+The affine discipline is best illustrated by a synthetic-violation test from the gate corpus: `double_use` from `tests/v1.5-validation/1a_double_use.arcana`. The fixture's `move` parameter `h` is consumed twice in the same scope — the compiler refuses to emit the program and produces error code E6010 [AFFINE-USE-AFTER-MOVE].
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; AFFINE-1A: Basic double-use → E6010
+;; move param used twice in same scope
+(arcana-ast :version 1 :module "test_affine_1a"
+  (dc-mod
+    :name "main"
+    :items (
+      (dc-fn :fn
+        (fn-decl
+          :body (block
+            :stmts (
+              (st-let :expr (ex-ident :name "h") :mut #f :pat (pat-ident :name "first_use"))
+              (st-let :expr (ex-ident :name "h") :mut #f :pat (pat-ident :name "second_use")))
+            :expr (ex-ident :name "first_use"))
+          :contracts ()
+          :effects ()
+          :name "double_use"
+          :params (
+            (param :modifier move :name "h" :type (ty-named :path "Int")))
+          :ret (ty-named :path "Int")
+          :tparams ()
+          :vis pub)))))
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn double_use(move h: Int) -> Int {
+  let first_use = h
+  let second_use = h   // → E6010 [AFFINE-USE-AFTER-MOVE]: 'h' used after move
+  first_use
+}
+```
+  </TabItem>
+</Tabs>
+
+The `move` modifier on parameter `h` is the affine declaration — `h` may be consumed exactly once. The second `let second_use = h` is the violation; the compiler refuses the program. The canonical form spells out every AST node; the human view above is the projection that `arcana view` will render once the bidirectional CLI ships at v1.7.8 ([D-489 council ratification](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form)).
 
 The affine discipline catches a class of bugs that no amount of testing reliably catches in mainstream languages: forgotten close, double-close, leaked connection on an error path. The compiler refuses to emit the program.
 

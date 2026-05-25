@@ -3,6 +3,8 @@ title: We didn't build a language for humans to write
 description: Arcana Lang is a target for AI code generation, not a human-coding tool. What changes when you design FOR the generator rather than for the developer reading the docs.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 AI code generators are confident. They are also wrong in specific, reproducible ways — and the reason they're wrong, more often than people credit, is the *language they're generating into*.
 
 We've been thinking about this backward. We assumed that the right move was to make generators better at the languages we already had. The languages we already had were designed for humans to write. Humans wrote them well enough that the languages survived. Then we pointed code generators at them and were surprised the generators inherited every category of bug those languages permit — leaked resources, undeclared side effects, data-flow that crosses boundaries it shouldn't, packages whose names the generator confidently invented from training noise.
@@ -44,16 +46,44 @@ A reviewer — human or AI — can reason about *what a unit of generated code i
 
 A resource handle — a database connection, a file handle, an HTTP response — must be consumed exactly once. **Double-use of a resource handle is a compile error. Undeclared drop is a compile error.** The check operates on Arcana-typed values and does not extend across `Unsafe` FFI boundaries or to native resources owned by the host.
 
-```arcana
-fn process_order(conn: DbConnection) -> {Database} Order {
-  let tx = conn.begin()      // conn consumed, tx created
-  let order = tx.insert(Order { ... })
-  tx.commit()                // tx consumed — cannot use again
-  order
-}
-// Attempting `tx.insert(...)` after `tx.commit()` is an E6010
-// [AFFINE-USE-AFTER-MOVE] error at compile time.
+From the gate corpus — `double_use` in `tests/v1.5-validation/1a_double_use.arcana`. The fixture's `move` parameter `h` is consumed twice in the same scope. The compiler refuses to emit the program.
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; AFFINE-1A: Basic double-use → E6010
+;; move param used twice in same scope
+(arcana-ast :version 1 :module "test_affine_1a"
+  (dc-mod
+    :name "main"
+    :items (
+      (dc-fn :fn
+        (fn-decl
+          :body (block
+            :stmts (
+              (st-let :expr (ex-ident :name "h") :mut #f :pat (pat-ident :name "first_use"))
+              (st-let :expr (ex-ident :name "h") :mut #f :pat (pat-ident :name "second_use")))
+            :expr (ex-ident :name "first_use"))
+          :contracts ()
+          :effects ()
+          :name "double_use"
+          :params (
+            (param :modifier move :name "h" :type (ty-named :path "Int")))
+          :ret (ty-named :path "Int")
+          :tparams ()
+          :vis pub)))))
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn double_use(move h: Int) -> Int {
+  let first_use = h
+  let second_use = h   // → E6010 [AFFINE-USE-AFTER-MOVE]: 'h' used after move
+  first_use
+}
+```
+  </TabItem>
+</Tabs>
 
 This catches a category of bug that no amount of generator-testing reliably catches in mainstream languages: forgotten close, double-close, leaked connection on an error path. The compiler refuses to emit the program.
 

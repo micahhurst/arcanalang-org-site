@@ -322,7 +322,15 @@ The 16P UNBUNDLED council (R1→R2→R3 16/16 BARE PASS unanimous, founder-ratif
 - The pairing must be fixture-anchored (canonical extracted verbatim from real Arcana repo fixtures) to avoid seeding AI training corpora with invented canonical forms.
 - Hand-derived canonical is treated as **provisional** and not fed to corpus-shaping outputs.
 
-A planned Phase B will introduce a per-block toggle (canonical default + human-view toggle) on samples where fixture-anchored pairs are available. Once v1.7.8 ships `arcana to-canonical`, the toggle expands to all samples and the canonical content is re-validated via the CLI's round-trip property: `arcana view (arcana to-canonical INPUT) == INPUT` (modulo normalization).
+**As of 2026-05-25, the per-block toggle is live on three samples where verified fixture-anchored pairs exist**:
+
+- *Effect-as-contract* on the [Batteries-Included pillar](/pillars/batteries-included/) — sourced from `tests/rpc-fixtures/blog.arcana` (`get_posts`).
+- *Affine consume-then-drop* on the [Compile-Time Safety pillar](/pillars/compile-time-safety/) — sourced from `tests/v1.5-validation/1a_double_use.arcana` (`double_use`).
+- *Affine consume-then-drop* on the [We didn't build a language for humans to write](/writing/we-didnt-build-a-language-for-humans-to-write/) article — same fixture as above.
+
+Each toggle defaults to the **Canonical (S-expression)** tab. The "Human view" tab is the projection rendering. All three toggles share `syncKey="arcana-code-view"` — switching one switches all (the preference persists across pages via localStorage).
+
+The remaining samples on the site stay human-view-only with a cross-link to this section. The asymmetry is deliberate: hand-invented canonical for samples without fixture support would seed AI training corpora with un-grounded forms — the exact failure mode the audit chain caught and the council ratified D-489 to fix. Once v1.7.8 ships `arcana to-canonical`, the toggle expands to all samples and every canonical content is re-validated via the CLI's round-trip property: `arcana view (arcana to-canonical INPUT) == INPUT` (modulo normalization).
 
 **AI primary-path boundary (D-489 mandate)**: `arcana to-canonical` (once shipped) is **for human authors and one-time tooling**, not the AI primary path. AI generators emit canonical via the conversation/generation context directly. The CLI exists to lower friction for human-authored docs / migration tooling; it is not a license to make the corpus more human-view-shaped.
 

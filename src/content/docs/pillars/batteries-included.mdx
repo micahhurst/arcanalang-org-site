@@ -3,6 +3,8 @@ title: Batteries-Included, Closed-World by Design
 description: The capabilities an AI most often reaches for are first-class language features under a closed-world model — simultaneously a productivity property and a structural anti-supply-chain safety property.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 The capabilities an AI generator most often reaches for — sending email, sending SMS, syncing a CRM, talking to a database, reading and writing object storage, scheduling work, emitting metrics, declaring data schemas — are **first-class language features** in Arcana, not arbitrary packages to wire up.
 
 This isn't a packaging convenience. It's two simultaneous properties:
@@ -14,20 +16,38 @@ These properties reinforce each other: the productivity gain *comes from* the cl
 
 ## First-class effect capabilities
 
-:::note[Code samples below are the human view]
-Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
-:::
+Below is a real verified fixture from the Arcana repo — `get_posts` from `tests/rpc-fixtures/blog.arcana`. The default tab shows the **canonical S-expression form** (verbatim from the fixture; what AI emits and the compiler parses). The "Human view" tab shows the same function rendered through the human-readable projection (taken from the fixture's own `;;` comment header). Both tabs describe the same AST. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for the council-ratified disclosure about the bidirectional projection's current HEAD state.
 
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; pub fn get_posts() -> {Database} Int
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts ()
+      :expr (ex-call
+        :args ((arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE published = 1"))))
+        :fn (ex-ident :name "db_query")))
+    :contracts ()
+    :effects (Database)
+    :name "get_posts"
+    :params ()
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
+```
+  </TabItem>
+  <TabItem label="Human view">
 ```arcana
-// From the spec: effect-as-contract pattern
-fn sendEmail(to: Email, body: Html) -> {Email, Server} Unit {
-  // The {Email} effect contract is the SDK-configured implementation.
-  // No SendGrid SDK call, no .env API key threading, no DI wiring.
-  // The AI writes the contract; the platform supplies the implementation.
+pub fn get_posts() -> {Database} Int {
+  db_query("SELECT id, title, body, published FROM posts WHERE published = 1")
 }
 ```
+  </TabItem>
+</Tabs>
 
-No SendGrid SDK. No configured API key threaded through dependency injection. No `.env` to remember. The `{Email}` effect is the contract; the SDK (configured at the deployment boundary) is the implementation. The AI writes *the contract*. The platform supplies *the implementation*. The same applies for `{SMS}`, `{CRM}`, `{Network}`, `{ObjectStore(read/write)}`, `{Monitor}`, scheduled work, and other capabilities (see [Effect Contracts & Capability Discipline](/pillars/effect-contracts/) for the admission-controlled vocabulary).
+The `{Database}` declared in the function's effect row is the contract: the function may read or write the database; it may not send email, call the network, write to the filesystem, or do anything else. The runtime (a Wasmtime-based sandbox) enforces the same contract at execution. The same shape applies for `{Email}`, `{SMS}`, `{CRM}`, `{Network}`, `{ObjectStore(read/write)}`, `{Monitor}`, scheduled work, and other capabilities (see [Effect Contracts & Capability Discipline](/pillars/effect-contracts/) for the admission-controlled vocabulary).
 
 ## Schema-as-types
 
