@@ -3,6 +3,10 @@ title: Portable Runtime & Execution
 description: Arcana compiles to WebAssembly and runs inside a sandboxed runtime — a runtime-side complement to the compile-time guarantees, so that even bypassed compile-time assumptions meet a second boundary at execution. Multi-target codegen extends to web and native mobile.
 ---
 
+:::tip[Where to start]
+**Recommended prior reading**: [Effect Contracts & Capability Discipline](/pillars/effect-contracts/) — the effect contracts that this pillar's runtime sandbox enforces are what that pillar describes. Unfamiliar terms? See the [Glossary](/glossary/).
+:::
+
 Arcana's compile-time guarantees are paired with a runtime-side **sandbox**: even bypassed compile-time assumptions meet a second boundary at execution. From one Arcana source, the toolchain emits to WebAssembly (the canonical target), web (HTMX-style islands + a TypeScript backend), iOS Swift, and Android Kotlin.
 
 This is the pillar that makes Arcana's safety story **defense-in-depth** — compile-time enforcement *and* runtime sandboxing, both checking the same effect contract.

@@ -3,6 +3,10 @@ title: Governance & Honest Scope
 description: The trust mechanisms that ground Arcana's other five pillars. Three parts — non-promises, the current honest state, open intentions (not commitments) — backed by a public marketing-claims ledger, numbered decision provenance, a multi-party council process, and an explicit Mirror-mode self-disclosure.
 ---
 
+:::tip[Where to start]
+**Recommended prior reading**: at least one of the technical pillars. This page describes the trust mechanisms that ground the claims those pillars make — it's meta-content about the project rather than the language. Unfamiliar terms? See the [Glossary](/glossary/).
+:::
+
 **The other five pillars are the language. This pillar is what makes the claims about that language trustworthy** — a public marketing-claims ledger, numbered decision provenance, a documented multi-party council process, and an explicit Mirror-mode self-disclosure. Without it, the rest is specification without warrant.
 
 ## The honesty triad

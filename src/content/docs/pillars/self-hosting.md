@@ -3,6 +3,10 @@ title: Self-Hosting & Determinism
 description: A journey, stated honestly. The compiler compiles itself with stage1=stage2 verification; the OCaml bootstrap is archived. Codegen output is production-quality for current targets. The verification-harness migration across targets is in progress and explicitly phased.
 ---
 
+:::tip[Where to start]
+**Recommended prior reading**: any of the technical pillars ([Compile-Time Safety](/pillars/compile-time-safety/) is the most directly relevant). This page is meta — it's about how the compiler that produces those safety guarantees is itself implemented + verified. Unfamiliar terms? See the [Glossary](/glossary/).
+:::
+
 **The Arcana compiler compiles itself.** With `stage1=stage2` byte-identical verification. The OCaml bootstrap is archived. WebAssembly codegen is verified end-to-end through the self-hosted path; the equal-verification migration across mobile and other targets is phased and in progress.
 
 Both halves are real — *output is current; verification-path parity is migrating* — and conflating them would be exactly the corpus drift Arcana's marketing-claims discipline exists to prevent. So this page draws the line precisely, and frames the whole as a journey rather than a finished claim.

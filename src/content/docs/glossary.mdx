@@ -1,0 +1,84 @@
+---
+title: Glossary
+description: One-line definitions of every Arcana-specific term used on this site. If you hit a word on a pillar page that assumes you already know it, look it up here.
+---
+
+This site uses programming-language theory terms, Arcana-internal vocabulary, and citations of decisions / work packages that aren't self-explanatory. This page defines them in one line each, alphabetical. If you find a term used on the site that isn't here, that's a documentation bug worth reporting.
+
+## Programming-language theory
+
+**Affine type** — a type whose values may be used **at most once**. Arcana's resource types (database connections, file handles, transactions) are affine — the compiler refuses to compile code that uses an affine value twice or fails to consume it. The opposite of an affine type is an *unrestricted* type (used any number of times, like `Int`). Affine differs from *linear* in that affine values may be dropped unused (linear values must be consumed exactly once). Arcana's affine discipline ships error code E6010 [AFFINE-USE-AFTER-MOVE] for violations.
+
+**AST** — Abstract Syntax Tree. The structured representation of a program after parsing. In Arcana, the AST is the *source of truth*; both the canonical S-expression form and the human view are projections of the same AST.
+
+**BPE token** — Byte-Pair Encoding token; the unit of text most AI language models operate over. Arcana keywords are designed to be single BPE tokens under both `cl100k_base` (GPT-4) and `o200k_base` (GPT-4o) encodings — that's why `fn`, `pub`, `mut`, `mod`, `enum`, `impl` are favored over multi-token alternatives like `function`, `public`, `mutable`.
+
+**Closed-world** — a language design where the package / capability surface is fixed and curated; no arbitrary external dependencies can be pulled in. Arcana's standard library + blessed-library tier are the closed world; `arcana install <arbitrary>` doesn't exist. Contrast: open-world languages (Python, JavaScript, Rust) where `pip install` / `npm install` / `cargo add` pull from unbounded ecosystems.
+
+**Effect** — a categorized side effect a function may perform: `{Email}`, `{Database}`, `{Network}`, `{Render}`, `{Monitor}`, `{Audit}`, `{FileSystem}`, etc. Effects are declared in function signatures and propagate through call chains. The set of valid effect names is closed and admission-controlled (effects added through documented process, not invented ad-hoc).
+
+**Effect row** — the set of effects appearing in a function signature between `->` and the return type. `fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error>` has effect row `{Database(server), Audit}`. The compiler enforces that the body performs no effects outside the declared row.
+
+**Effect contagion** — the property that effects propagate from callee to caller in function signatures. If `f` calls `g`, and `g`'s declared effects include `{Database}`, then `f`'s signature must also include `{Database}` (or contain it). The contract travels.
+
+**FFI** — Foreign Function Interface. Arcana's `Unsafe` escape hatch for calling non-Arcana native code. Carries the `Unsafe` effect, which is visible in every call chain that uses it.
+
+**Refinement type** — a base type narrowed by a predicate that must hold at every use site. `Username = String where len ≤ 32` is a `String` that cannot hold a 40-character value. Arcana's refinement types are scoped to a subset of predicate forms; general predicates are roadmap.
+
+**Schema-as-types** — Arcana's pattern where one `schema X { ... }` declaration generates the Arcana type, the SQL `CREATE TABLE`, the migration, and input validation from a single source. Eliminates drift between code, DB, and validators.
+
+**Taint analysis** — interprocedural data-flow tracking of untrusted input toward sensitive sinks (SQL queries, HTML templates, system calls). Arcana's taint analysis catches common AI-generated injection patterns at compile time within a documented coverage map (WP-34 §7.1); sophisticated variants require explicit `@sanitizer` annotations or runtime sanitization.
+
+## Arcana-specific vocabulary
+
+**`@hermetic`** — function annotation marking the function as effect-bounded for determinism. The compiler rejects `@hermetic` functions whose effect row includes `{Network}`, `{FileSystem}`, `{Database}`, or `{Process}` (per decision D285a).
+
+**`@sanitizer`** — function annotation that registers a function as a sanitizer in Arcana's taint analysis. Sanitizers produce `Sanitized String` or `Sanitized Html` values that satisfy taint-clearing predicates at type-check time.
+
+**`@should_not_compile`** — annotation on gate-corpus fixtures asserting that the function MUST fail to compile and emit a specific error code. Used to test that the compiler's safety gates still fire ("canary-of-canary" discipline).
+
+**Canonical form** — the S-expression representation of an Arcana program. What AI generators emit; what the compiler parses; the source of truth. Sample: `(dc-fn :fn (fn-decl :name "get_posts" :effects (Database) :ret (ty-named :path "Int") ...))`.
+
+**Capability manifest** — the deploy-artifact record of what effects a compiled WASM module actually performs. Enforced at the runtime sandbox boundary in addition to the compile-time check.
+
+**`dc-*`** — AST node prefix for top-level *declarations*: `dc-fn` (function), `dc-struct` (struct), `dc-schema` (schema), `dc-mod` (module), `dc-page` (page handler), `dc-component` (UI component), `dc-job` (background job), `dc-chan` (channel).
+
+**`ex-*`** — AST node prefix for *expressions*: `ex-call` (call), `ex-ident` (identifier reference), `ex-lit` (literal), `ex-binop` (binary operation), `ex-pipe` (pipe operator).
+
+**Human view** — the familiar-syntax projection of the canonical form, rendered for human readers. The same program in two views; the AST is unchanged. The bidirectional projection (canonical ↔ human view) ships at v1.7.8 per [D-489](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form).
+
+**Mirror-mode** — a safety-decay mode named by the Arcana decay taxonomy: an AI generator and an AI reviewer (or two AI reviewers) trained on overlapping corpora close a review loop with hallucinated consensus, missing shared blind spots a human or off-corpus reviewer would catch.
+
+**Pre-tag grep** — the marketing-claims regex pattern that covers every R-class rejected phrasing; designed to be run over release-candidate surfaces as a release-prep step. Automated wiring into `make release-gate` ships at v1.7.8 per D482.
+
+**Stage1=stage2** — Arcana's self-hosting verification: the compiler-built-with-bootstrap (stage1) and the compiler-built-with-self (stage2) produce byte-identical output on the verification suite.
+
+**`st-*`** — AST node prefix for *statements*: `st-let` (let binding), `st-expr` (expression statement).
+
+**`ty-*`** — AST node prefix for *types*: `ty-named` (named type), `ty-app` (type application), `ty-refined` (refinement type, post-v1.7.6).
+
+## Project citations
+
+**A-class claim** — a marketing claim approved for use on Arcana surfaces, paired with a specific shipped mechanism and a mandatory scope hedge. Examples: A1 (synthetic-violation test corpus discipline), A4 (effect-widening detection framework), A6 (reversibility-at-SDK), A7 (hedge-adjacency discipline). See [Claims Ledger](/governance/claims-ledger/).
+
+**D-#** (D160, D219, D285a, D482, D489, etc.) — numbered decision in the project's `governance/DECISIONS-LOG.md`. Cited inline when a claim is grounded in a specific binding decision. The `a` suffix (e.g., D285a) marks an amendment to a prior decision.
+
+**Pillar 1–6** — the six lock-set pillars of the launch surface: (1) Compile-Time Safety, (2) Effect Contracts & Capability Discipline, (3) Batteries-Included, (4) Portable Runtime & Execution, (5) Self-Hosting & Determinism, (6) Governance & Honest Scope. The numbering is structural-ratification order; the sidebar order is pedagogical (concrete → abstract → meta).
+
+**R-class claim** — a marketing claim explicitly rejected by the project, even in negation. The pre-tag grep matches these shapes. The site does not quote the canonical verbatim rejected phrasings (per the corpus-shaping discipline at [§ Intentional verbatim-phrasing omission](/governance/claims-ledger/#intentional-verbatim-phrasing-omission)). The canonical regex lives in `governance/marketing-claims-v1.7.10.md` in the Arcana repo.
+
+**WP-#** (WP-14, WP-34 §7.1, WP-41, etc.) — numbered Work Package in the Arcana language specification. Cited inline when a claim's scope is grounded in a specific spec section. The §7.1-style suffix references a sub-section within the work package.
+
+## Compiler / build vocabulary
+
+**E####** — Arcana error codes. `E2020` is the canonical XSS / unsafe HTML interpolation gate; `E3043` is the closed-row effect-row mismatch; `E6010` is the affine use-after-move violation; etc. The full registry lives in `spec/arcana-error-code-registry.md` in the Arcana repo.
+
+**Gate corpus** — `tests/gate-corpus/E####/` directories containing synthetic-violation fixtures. Each blocking error code carries at least one fixture asserting the gate still fires. The canary-of-canary sentinel tests that the runner itself hasn't no-op'd.
+
+**`make release-gate`** — Arcana's Makefile target that runs the automated release-readiness checks (currently shipped: spec-impl symmetry, must-work coverage, stub-surface auditing, codegen golden tests, etc.). Distinct from the parallel release-prep checklist of manual items (security review, marketing-claims grep, etc.). See [Known Issues §5](/honest-scope/known-issues/#5-release-gate-discipline-is-multi-mechanism-moving-toward-verifiable) for the honest split.
+
+**Self-hosted compiler** — a compiler implemented in the language it compiles. Arcana's compiler is written in Arcana (`src/*.arcana`); the OCaml bootstrap is archived. Verified end-to-end through the `stage1=stage2` byte-identical comparison.
+
+---
+
+*This glossary is maintained alongside the site. If you find a term used on any page that isn't defined here, please flag it — that's a documentation gap.*

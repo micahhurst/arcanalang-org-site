@@ -42,16 +42,23 @@ export default defineConfig({
 				Footer: './src/components/Footer.astro',
 			},
 			sidebar: [
-				// Sidebar autogenerates from each section directory as content lands.
-				// 12-page MVP structure:
-				//   Pillars (6) — /pillars/{compile-time-safety,effect-contracts,batteries-included,runtime,self-hosting,governance-honest-scope}/
-				//   Reading Arcana — single-page section explaining canonical/human-view dual display.
-				//   Writing — /writing/* (Day-1 launch article + cadence)
-				//   Honest Scope — /honest-scope/{index,open-intentions,non-promises,decay-modes,known-issues}/
-				//   Governance — /governance/{claims-ledger,council-process,decisions}/
-				//   Top-level: glossary, origin, for-ai-agents.
-				{ label: 'Pillars', items: [{ autogenerate: { directory: 'pillars' } }] },
+				// Sidebar order is PEDAGOGICAL, not alphabetical. Pillars are explicitly enumerated
+				// in concrete → abstract → meta order so a first-time reader following the sidebar
+				// hits accessible content first. Don't switch back to autogenerate without rethinking
+				// the read order.
 				{ label: 'Reading Arcana', link: '/reading-arcana/' },
+				{ label: 'Glossary', link: '/glossary/' },
+				{
+					label: 'Pillars',
+					items: [
+						{ label: 'Batteries-Included, Closed-World by Design', link: '/pillars/batteries-included/' },
+						{ label: 'Effect Contracts & Capability Discipline', link: '/pillars/effect-contracts/' },
+						{ label: 'Compile-Time Safety', link: '/pillars/compile-time-safety/' },
+						{ label: 'Portable Runtime & Execution', link: '/pillars/runtime/' },
+						{ label: 'Self-Hosting & Determinism', link: '/pillars/self-hosting/' },
+						{ label: 'Governance & Honest Scope', link: '/pillars/governance-honest-scope/' },
+					],
+				},
 				{ label: 'Writing', items: [{ autogenerate: { directory: 'writing' } }] },
 				{ label: 'Honest Scope', items: [{ autogenerate: { directory: 'honest-scope' } }] },
 				{ label: 'Governance', items: [{ autogenerate: { directory: 'governance' } }] },

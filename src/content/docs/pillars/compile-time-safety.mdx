@@ -5,6 +5,10 @@ description: The irreducible pillar — effect system, affine resource types, re
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
+:::tip[Where to start]
+**Recommended prior reading**: [Batteries-Included](/pillars/batteries-included/) and [Effect Contracts & Capability Discipline](/pillars/effect-contracts/). This pillar is the most PL-theory-dense of the six — effect system, affine types, refinement types, taint analysis. Those preceding pillars introduce the effect vocabulary and the contract framing that make this content accessible. Hit an unfamiliar term? See the [Glossary](/glossary/).
+:::
+
 Compile-time safety is Arcana's irreducible core. Every other pillar — effect contracts, batteries-included capabilities, the portable runtime, self-hosting, governance — rests on what the type system can statically prove *before code runs*.
 
 The premise: side effects and resource discipline are enforced by the type system, not by convention. If a generator (human or AI) writes code that would violate a declared safety constraint, the compiler rejects it before the code reaches the runtime.

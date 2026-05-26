@@ -3,6 +3,10 @@ title: Effect Contracts & Capability Discipline
 description: Effects aren't just a purity device — they're operational contracts that travel from authoring through checking to deployment, drawn from an admission-controlled vocabulary.
 ---
 
+:::tip[Where to start]
+**Recommended prior reading**: [Batteries-Included](/pillars/batteries-included/) introduces the effect vocabulary (`{Email}`, `{Database}`, etc.). After this pillar, the natural next step is [Compile-Time Safety](/pillars/compile-time-safety/) for the deeper type-system mechanism. Unfamiliar terms? See the [Glossary](/glossary/).
+:::
+
 Effect contracts are Arcana's operational boundary: signatures declare what code may do, the compiler verifies it, and deployment artifacts preserve it for audit. [Compile-Time Safety](/pillars/compile-time-safety/) covers the *mechanism* — the effect system as a type-system feature. This page covers what that mechanism *means operationally*: effects as contracts that travel from the moment a function is written, through the compiler's verification, into the deployment artifact a downstream evaluator can inspect.
 
 Where compile-time-safety says "effects are typed," this view says "and the typing means something specific, governed, and cross-stage."
