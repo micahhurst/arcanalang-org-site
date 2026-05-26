@@ -25,20 +25,32 @@ This isn't a developer-experience regression. It's the structural reason a typos
 
 In a generic language, the only way to know what a function does is to read its body — or to trust the docs match. In Arcana, every function declares its side effects in the signature, drawn from a closed and governed vocabulary:
 
-:::note[Code samples below are the human view]
-Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
-:::
+Below is `cleanup_expired_sessions` from `tests/v175-c2/fixtures/dc-job.arcana` — a verified multi-effect declaration. A `dc-job` wraps an effect-annotated function as a scheduled job; this one declares both `Database` and `Cron` effects in its row. The compiler enforces that the body performs no effects beyond those two.
 
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; v1.7.5 C2 fixture: dc-job wrapping a Cron effect fn.
+(dc-job
+  :decl (dc-fn
+    :name "cleanup_expired_sessions"
+    :vis pub
+    :params ()
+    :ret (ty-named :path "Int")
+    :effects ("Database" "Cron")
+    :body (block :stmts () :expr (ex-lit :value (lit-int :value "0")))))
+```
+  </TabItem>
+  <TabItem label="Human view">
 ```arcana
-fn delete_user(id: UserId) -> {Database(server), Audit} Result<Unit, Error> {
-  // The signature is the contract. Whatever this body does, it cannot:
-  //   - send email (no {Email} declared)
-  //   - call the network (no {Network} declared)
-  //   - write to the filesystem (no {FileSystem} declared)
-  // {Audit} is the v1.4 audit-trail effect (D231); deletion records to the
-  // audit log without granting any other capability.
+pub job cleanup_expired_sessions() -> {Database, Cron} Int {
+  0
 }
 ```
+  </TabItem>
+</Tabs>
+
+`{Database, Cron}` is the contract. Whatever the body does, it cannot send email, call the network, write to the filesystem, or perform any effect outside the declared row. A reviewer — human or AI — can reason about *what a unit of generated code is permitted to do* without reading its body. The signature is the verification surface. The compiler enforces the body matches. The effects propagate through call chains so a caller that depends on a side-effect-rich callee must declare that effect too. The contract travels.
 
 A reviewer — human or AI — can reason about *what a unit of generated code is permitted to do* without reading its body. The signature is the verification surface. The compiler enforces the body matches. The effects propagate through call chains so a caller that depends on a side-effect-rich callee must declare that effect too. The contract travels.
 

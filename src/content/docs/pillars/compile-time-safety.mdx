@@ -114,17 +114,50 @@ The current predicate subset is documented in the language specification (which 
 
 Interprocedural taint analysis tracks how untrusted input flows through the program toward sinks — SQL queries, HTML templates, system calls. Common AI-generated injection patterns (direct interpolation of user input into a SQL string, unsanitised rendering into HTML) are caught at compile time *within the coverage map documented in the spec* — sophisticated variants (encoding-encoded injection, ORM-bypass, JSX-style attribute injection, and the rest of the named gap list below) still require explicit `@sanitizer` annotations or runtime sanitization at the boundary. (Throughout this page, **WP-#** refers to a numbered Work Package in the Arcana language specification; **D#** to a numbered design decision in the project's public decision record.)
 
-```arcana
-// From the spec gate-corpus: synthetic-violation that MUST emit E2020
-@should_not_compile(tier: SEMANTICS, code: E2020)
-pub fn render_user_name(name: String) -> Html {
-    html"<div>{name}</div>"  // unescaped interpolation — XSS surface
-}
-// → E2020: XSS marker detected in render output
-// (Scoped: substring match against canonical markers; HTML-entity-encoded
-//  and other sophisticated variants are NOT caught at this layer — see
-//  WP-34 §7.1 for the current coverage map and disclosed gaps.)
+Below is `render_valid_sanitized` from `tests/c30/fixtures/c30_valid_sanitized_html_rg7.arcana` — a verified positive-case fixture showing the approved sanitization path. The `sanitized_html()` call is an allowlisted sanitizer that produces a `SanitizedHtml` value; the type system tracks the sanitization provenance, so the subsequent `embed(content: safe, ...)` call accepts it without a taint violation.
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; C30 RG-7 fixture: valid sanitized_html() → embed(content:) — MUST compile clean.
+;; SanitizedHtml via allowlisted sanitizer is valid input to embed.
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts (
+        (st-let :mut #f :pat (pat-ident :name "safe")
+          :expr (ex-call
+            :args ((arg-positional :expr (ex-lit :value (lit-string :value "<b>ok</b>"))))
+            :fn (ex-ident :name "sanitized_html")))
+        (st-expr :expr (ex-call
+          :args (
+            (arg-named :name "content" :expr (ex-ident :name "safe"))
+            (arg-named :name "label" :expr (ex-lit :value (lit-string :value "X"))))
+          :fn (ex-ident :name "embed"))))
+      :expr (ex-lit :value (lit-int :value "0")))
+    :contracts ()
+    :effects (Render)
+    :name "render_valid_sanitized"
+    :params ()
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn render_valid_sanitized() -> {Render} Int {
+  let safe = sanitized_html("<b>ok</b>")
+  embed(content: safe, label: "X")
+  0
+}
+```
+  </TabItem>
+</Tabs>
+
+The complement of this fixture — the negative case where raw unsanitised input flows into a render sink — emits `E1221` (and the related XSS-marker codes named in WP-34 §7.1). The taint analysis tracks provenance across calls: a value that passed through `sanitized_html()` carries the `SanitizedHtml` refinement; raw `String` does not. The render sink's contract accepts only `SanitizedHtml`, so the type system enforces the discipline at compile time without runtime checks.
+
+This coverage is **explicitly scoped**, not comprehensive — the gap list is named below.
 
 This coverage is **explicitly scoped**, not comprehensive. The gap list is named in the specification rather than hidden:
 

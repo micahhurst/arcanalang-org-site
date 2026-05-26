@@ -3,6 +3,8 @@ title: Portable Runtime & Execution
 description: Arcana compiles to WebAssembly and runs inside a sandboxed runtime — a runtime-side complement to the compile-time guarantees, so that even bypassed compile-time assumptions meet a second boundary at execution. Multi-target codegen extends to web and native mobile.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
 :::tip[Where to start]
 **Recommended prior reading**: [Effect Contracts & Capability Discipline](/pillars/effect-contracts/) — the effect contracts that this pillar's runtime sandbox enforces are what that pillar describes. Unfamiliar terms? See the [Glossary](/glossary/).
 :::
@@ -25,25 +27,43 @@ For server-side execution, the **shipped implementation** is a custom Wasmtime-b
 
 What this gives the safety story in practice:
 
-:::note[Code samples below are the human view]
-Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
-:::
+Below is `search_posts` from `tests/rpc-fixtures/blog.arcana` — verified canonical, single `{Database}` effect. The compile-time effect row IS the runtime capability budget: the sandbox grants exactly the declared effects, no more.
 
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; pub fn search_posts(query: String) -> {Database} Int
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts ()
+      :expr (ex-call
+        :args (
+          (arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE title LIKE ?")))
+          (arg-positional :expr (ex-ident :name "query")))
+        :fn (ex-ident :name "db_query")))
+    :contracts ()
+    :effects (Database)
+    :name "search_posts"
+    :params (
+      (param :modifier none :name "query" :type (ty-named :path "String")))
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
+```
+  </TabItem>
+  <TabItem label="Human view">
 ```arcana
-// {Database(local)} is the v0.7+ parameterized form — SQLite, synchronous.
-// {Database(server)} would be Postgres, async (requires await).
-// {Database(synced)} would be local + server with background sync.
-fn quotes_endpoint() -> {Network, Database(local)} Result<Json, Error> {
-  // compile-time: this function declared {Network, Database(local)}.
-  // run-time (Spin sandbox): the deployed component is granted exactly
-  //   {Network outbound to whitelisted hosts, Database access scoped to
-  //    the SDK-configured local connection}.
-  // anything else attempted at runtime — file system, environment vars,
-  //   process spawn — the host runtime refuses.
+pub fn search_posts(query: String) -> {Database} Int {
+  db_query("SELECT id, title, body, published FROM posts WHERE title LIKE ?", query)
 }
 ```
+  </TabItem>
+</Tabs>
 
-The compile-time check and the runtime sandbox enforce the *same* contract — once at build time, once at execution time.
+Compile-time: the declared `{Database}` effect is the contract — the body may read or write the database, nothing else. Run-time (Wasmtime / Spin sandbox): the deployed component is granted exactly `Database` capability; anything else attempted at runtime (file system, environment vars, network egress, process spawn) the host runtime refuses. The compile-time check and the runtime sandbox enforce the *same* contract — once at build time, once at execution time.
+
+`{Database}` can be parameterized as `Database(local)` (SQLite, synchronous), `Database(server)` (Postgres, async — requires `await`), or `Database(synced)` (local + server with background sync) at v0.7+. The example above uses the unparameterized form; the parameterized variants compose the same way in the effect row.
 
 ### Honestly named: the host-shim layer is Rust
 
@@ -57,26 +77,59 @@ The same Arcana source compiles to multiple frontend / mobile targets:
 - **iOS**: Swift output, integrated with platform UI primitives.
 - **Android**: Kotlin output, integrated with platform UI primitives.
 
-```arcana
-// From the spec: page handler with type-safe query + render. One source.
-page "/users/:id" {
-  user = User.find(id)       // type-safe query
-  render UserProfile(user)   // type-safe template
-}
+Two verified fixtures from the Arcana repo demonstrate the multi-target shape. First, a page handler — `dc-page :name "Home" :route "/users/:id"` from `tests/v175-c2/fixtures/dc-page.arcana`:
 
-component UserProfile(user: User) -> {Server} Html {
-  <div padding={4} bg={gray.50} rounded={lg}>
-    <h1 font_size={xl} font_weight={bold}>{user.name}</h1>
-    <p color={gray.600}>{user.email}</p>
-    <PostList posts={user.posts} />
-  </div>
-}
-// Compiles to:
-//   - web/HTMX island + TS handler
-//   - iOS SwiftUI view + action handler
-//   - Android Compose composable + action handler
-// Each target's codegen emits the platform-native idiom.
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; v1.7.5 C2 fixture: dc-page declaration lowering.
+(dc-page
+  :body (block :stmts () :expr (ex-lit :value (lit-int :value "0")))
+  :name "Home"
+  :params (
+    (param :modifier none :name "id" :type (ty-named :path "Int")))
+  :route "/users/:id"
+  :vis pub)
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub page Home(id: Int) at "/users/:id" {
+  0
+}
+```
+  </TabItem>
+</Tabs>
+
+A `dc-page` carries a route, a parameter list, a body, and a return type. The compile-time codegen produces the per-target route handler from this single declaration — HTMX-style island + TypeScript handler for web; SwiftUI view + action handler for iOS; Jetpack Compose composable + action handler for Android.
+
+Second, a reusable component — `dc-component :name "Greeting"` from `tests/v175-c2/fixtures/dc-component.arcana`:
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; v1.7.5 C2 fixture: dc-component declaration lowering.
+(dc-component
+  :body (block
+    :stmts ()
+    :expr (ex-ident :name "label"))
+  :name "Greeting"
+  :params (
+    (param :modifier none :name "label" :type (ty-named :path "String")))
+  :tparams ()
+  :vis pub)
+```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub component Greeting(label: String) {
+  label
+}
+```
+  </TabItem>
+</Tabs>
+
+A `dc-component` is a reusable UI primitive that the codegen emits as platform-native UI for each target. The custom UI primitive admission-controlled discipline (must implement all platforms or none) prevents single-target "drift" from showing up at deploy time as a missing platform.
 
 Cross-platform UI primitives are declared once. The codegen layer translates to each target's native idioms (SwiftUI on iOS, Jetpack Compose on Android, HTMX/web on browser). A custom UI primitive must implement all platforms — an admission-controlled discipline that prevents single-target "drift" from showing up at deploy time as a missing platform.
 
