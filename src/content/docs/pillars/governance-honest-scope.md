@@ -56,9 +56,32 @@ A numbered record (D-prefixed entries — `D001`, `D002`, …) of every architec
 
 ### A documented multi-party council process
 
-Major design decisions go through a structured council process — multiple perspectives, explicit convergence criteria, archived round notes. The process is *itself a documented artifact* (`COUNCIL-PROCESS.md`) rather than implicit practice. The current council format is a 16-perspective unbundled review for substantive decisions, with founder ratification recording the binding choice.
+Major design decisions go through a structured council process — multiple perspectives, explicit convergence criteria, archived round notes. The process is *itself a documented artifact* (`COUNCIL-PROCESS.md`) rather than implicit practice. The current council format is a 16-perspective unbundled review (the *16P UNBUNDLED* format) for substantive decisions, with founder ratification recording the binding choice. A council session iterates R1 → R2 → R3 until perspectives converge unanimously; the founder then ratifies the converged verdict, which lands in `governance/DECISIONS-LOG.md` with a D-number.
 
 Council process limitations are themselves disclosed (see Mirror-mode below).
+
+#### The council members
+
+The 16 perspectives are role-typed AI reviewers, each scoped to a distinct review function. Each reviewer reads the same decision proposal independently and produces a per-perspective verdict; the convergence criterion is unanimous BARE PASS (no AWN — "approved with notes" doesn't count toward convergence under the founder's R3-doctrine). The roles are:
+
+- **guardian** — enforces founder-protected discipline (files and decisions the founder has explicitly locked from modification without re-ratification). Catches scope creep.
+- **historian** — verifies the proposal against prior decisions and amendment history. Catches contradictions with earlier ratifications and stale-claim drift.
+- **formalist** — checks machine-readable structure: schemas, JSON discriminators, EBNF grammar conformance, regex validity. Catches "looks right, isn't parseable."
+- **vision-keeper** — checks the proposal against the project's stated brand and pillar structure. Catches drift from the locked launch narrative.
+- **compiler-eng** — reviews implementation feasibility against the actual compiler state. Catches "spec assumes something the compiler can't do yet."
+- **mobile-practices** — verifies multi-target codegen claims (iOS Swift, Android Kotlin emitter compatibility, mobile-specific effect parameterization). Catches mobile-codegen regressions before they ship.
+- **security-auditor** — reviews security claims and threat-model assumptions. Catches "this is more open than the prose admits."
+- **interface-designer** — checks UI / DX / developer-affordance claims. Catches "this would confuse a real user at first encounter."
+- **performance-reviewer** — checks claims about compile speed, runtime cost, codegen output size. Catches performance regressions disguised as features.
+- **accessibility-auditor** — checks accessibility claims (especially for the page / component multi-target codegen). Catches ARIA / contrast / keyboard-nav drift.
+- **trajectory** — checks whether the proposal's roadmap commitments are coherent with the broader version trajectory. Catches version-anchor mismatches.
+- **readability-reviewer** — checks the prose and documentation for clarity. Catches "this is technically correct but unreadable."
+- **error-analyst** — reviews the error-code register integrity. Catches duplicate / orphaned / mis-tier'd error codes.
+- **impl-auditor** — runs the spec-vs-impl symmetry check against the actual repo state. Catches "claimed shipped, not actually wired."
+- **pragmatist** — checks for over-engineering. Catches "this is more discipline than the actual risk warrants."
+- **integration-checker** — checks whether the proposal composes correctly with adjacent specs and prior decisions. Catches integration-level breakage that none of the per-component perspectives catch.
+
+These are **AI perspectives, not human PL experts.** The Mirror-mode disclosure below explains the structural risk this creates and the mitigation path. Naming the roles explicitly is itself part of the discipline: a SecOps reader can see the council process isn't a black box, can map a given decision's verdict back to which perspectives approved it, and can identify which perspectives might be systematically blind to a given risk class.
 
 ### An in-progress move toward release discipline that is *verifiable*
 

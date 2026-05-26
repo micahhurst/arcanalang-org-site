@@ -19,21 +19,41 @@ The premise: side effects and resource discipline are enforced by the type syste
 
 Every function declares the side effects it performs. Effects are first-class citizens of the type system — they appear in function signatures, they propagate through call chains, and they're drawn from a closed, governed vocabulary (effects are added, retired, or rejected through a documented process, not invented ad-hoc).
 
-:::note[Code samples below are the human view]
-Arcana has two representations: the **canonical S-expression form** that AI emits and the compiler parses, and the **human view** that `arcana view` renders for human readability. The samples below are the human view. See [Known Issues §9](/honest-scope/known-issues/#9-code-samples-on-this-site--human-view-not-the-canonical-form) for a side-by-side reference and the planned dual-view toggle.
-:::
+Below is `get_post_by_id` from `tests/rpc-fixtures/blog.arcana` — a verified fixture showing how an effect declared in the signature becomes the function's contract. The `{Database}` effect row is the compiler's promise about what this function is permitted to do.
 
-```arcana
-// From the spec: Database + observability effects declared in signature
-fn getUser(id: UserId) -> {Database, Monitor} Option<User> {
-  log("Fetching user #{id}")                  // {Monitor}
-  query User where id == id |> first          // {Database}
-}
-
-// Pure function — no effects declared. Calling an effectful function
-// from here is a compile error: the declared effect row is empty.
-fn add(a: Int, b: Int) -> Int { a + b }
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; pub fn get_post_by_id(post_id: Int) -> {Database} Int
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts ()
+      :expr (ex-call
+        :args (
+          (arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE id = ?")))
+          (arg-positional :expr (ex-ident :name "post_id")))
+        :fn (ex-ident :name "db_query_one")))
+    :contracts ()
+    :effects (Database)
+    :name "get_post_by_id"
+    :params (
+      (param :modifier none :name "post_id" :type (ty-named :path "Int")))
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
 ```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn get_post_by_id(post_id: Int) -> {Database} Int {
+  db_query_one("SELECT id, title, body, published FROM posts WHERE id = ?", post_id)
+}
+```
+  </TabItem>
+</Tabs>
+
+The effect row `{Database}` makes the contract visible at signature-read time. A function with an empty effect row (`pub fn add(a: Int, b: Int) -> Int { a + b }`) is pure — calling an effectful function from a pure function is a compile error, because the declared effect row doesn't admit the effect. This is what gives an evaluator — a human reader, an AI reviewer, a deployment manifest — confidence about *what a unit of generated code is permitted to do* without reading its body.
 
 This is what gives an evaluator — a human reader, an AI reviewer, a deployment manifest — confidence about *what a unit of generated code is permitted to do* without reading its body. The effect row is the contract.
 

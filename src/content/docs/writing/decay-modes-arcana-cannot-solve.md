@@ -5,7 +5,7 @@ description: How safety gates fail over time — and what categories of failure 
 
 A language can refuse to compile unsafe code. A language cannot prevent the *organizational* shapes that let unsafe code reach production anyway. There are categories of gate-failure that no compile-time discipline can solve — and the honest move, when you can name a failure mode you cannot prevent, is to *name it explicitly*. Arcana names four.
 
-The framework starts with a piece of work by [Jason Iannazzo](https://www.linkedin.com/in/jason-iannazzo/) — his observation that the two best-known data-breach failures of the 2010s, **Equifax** and **Target**, failed through structurally different mechanisms even though both had "the right gate technology in place." Arcana extends that observation into a four-mode taxonomy. Two of the four are Jason's; two are Arcana-era additions.
+The framework starts with a piece of work by Jason Iannazzo — his observation that the two best-known data-breach failures of the 2010s, **Equifax** and **Target**, failed through structurally different mechanisms even though both had "the right gate technology in place." Arcana extends that observation into a four-mode taxonomy. Two of the four are Jason's; two are Arcana-era additions.
 
 ## Equifax-mode — the gate fires, nobody reads
 
