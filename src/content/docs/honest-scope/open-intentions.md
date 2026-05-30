@@ -51,6 +51,10 @@ We want the release gate to move from "the human or process signed off" to "the 
 
 We want a substantive, AI-agent-oriented guide on how to generate Arcana competently — patterns, anti-patterns, idiom catalogs, the contract between generator and reviewer. This guide is important for AI-agent developers adopting Arcana. We have the scope; we have not yet written the guide. The intent is to write it; the timeline is not committed.
 
+### Cookbook of worked examples
+
+We want a cookbook — recipes that solve concrete problems in Arcana, each in both canonical and human view. We'd like every recipe to carry verified canonical rather than hand-derived forms, which is why a cookbook depends on the canonical-projection tooling named elsewhere in [Honest Scope](/honest-scope/). We are not committing to when it arrives, or that the tooling lands on any particular schedule. The want is named; the [placeholder page](/cookbook/) explains the discipline behind the wait.
+
 ### Reproducible-build verification
 
 We want the codegen output to be reproducible — same source, same compiler, byte-identical output across machines. The self-hosted compiler's `stage1=stage2` verification is in this neighborhood ([Self-Hosting & Determinism](/pillars/self-hosting/)); a *full* reproducible-build story (in the [Reproducible Builds project](https://reproducible-builds.org/) sense) for end-user artifacts is a want.

@@ -5,6 +5,12 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://arcanalang.org',
+	// The decay-modes essay's filename slug differs from its title; humans and AI agents
+	// who slugify the page title land on a non-existent URL. Bounce them to the real page.
+	redirects: {
+		'/writing/decay-modes-arcana-cannot-solve-at-the-language-layer/':
+			'/writing/decay-modes-arcana-cannot-solve/',
+	},
 	integrations: [
 		starlight({
 			title: 'Arcana Lang',
@@ -47,6 +53,7 @@ export default defineConfig({
 				// hits accessible content first. Don't switch back to autogenerate without rethinking
 				// the read order.
 				{ label: 'Reading Arcana', link: '/reading-arcana/' },
+				{ label: 'When to Use Arcana', link: '/when-to-use-arcana/' },
 				{ label: 'Glossary', link: '/glossary/' },
 				{
 					label: 'Pillars',
@@ -60,6 +67,7 @@ export default defineConfig({
 					],
 				},
 				{ label: 'Writing', items: [{ autogenerate: { directory: 'writing' } }] },
+				{ label: 'Cookbook', link: '/cookbook/', badge: { text: 'Soon', variant: 'note' } },
 				{ label: 'Honest Scope', items: [{ autogenerate: { directory: 'honest-scope' } }] },
 				{ label: 'Governance', items: [{ autogenerate: { directory: 'governance' } }] },
 			],

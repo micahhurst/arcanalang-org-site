@@ -15,6 +15,7 @@ hero:
 ---
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 Arcana Lang is a programming language designed as a compile-time-safe *target for AI code generation*. Generic languages — TypeScript, Python, Ruby — were designed for humans. AI generators that target them inherit every safety problem those languages permit. Arcana inverts the premise: if an AI generates code that would violate a declared safety constraint, the compiler rejects it before the code can run.
 
@@ -43,9 +44,17 @@ If you're new to Arcana, read these three pages in order. They give you the fram
 
 **Hit an unfamiliar term?** [Glossary](/glossary/) defines every Arcana-specific token used on this site in one line each.
 
+## Sizing up a project?
+
+<CardGrid>
+	<LinkCard title="When to use Arcana" href="/when-to-use-arcana/" description="What Arcana is a strong fit for, and what it deliberately isn't — with a one-line decision rule for AI agents and humans choosing a stack." />
+	<LinkCard title="Cookbook — coming soon" href="/cookbook/" description="A worked-example collection is on the way. It's gated on the canonical-projection tooling so every recipe ships with verified canonical, not hand-guessed forms." />
+</CardGrid>
+
 ## Recent writing
 
 <CardGrid>
+	<LinkCard title="I set out to build websites. I ended up designing a language for AI." href="/writing/origin-story/" description="The origin story — how building software for small businesses led to Arcana, and why the wall I hit was the language, not the AI." />
 	<LinkCard title="We didn't build a language for humans to write" href="/writing/we-didnt-build-a-language-for-humans-to-write/" description="Arcana Lang is a target for AI code generation, not a human-coding tool. What changes when you design FOR the generator." />
 	<LinkCard title="Four decay modes Arcana cannot solve at the language layer" href="/writing/decay-modes-arcana-cannot-solve/" description="How safety gates fail over time. Extends Jason Iannazzo's Equifax/Target framework with two AI-era additions." />
 </CardGrid>
@@ -66,3 +75,9 @@ If you're new to Arcana, read these three pages in order. They give you the fram
 		A *Curated-Ecosystem-Future* pillar is part of the long-term identity but explicitly out of the launch set — surfaced under [Open Intentions (Not Commitments)](/honest-scope/open-intentions/) rather than as a current capability.
 	</Card>
 </CardGrid>
+
+## Stay in the loop
+
+The compiler binary isn't public yet — the spec, decisions, and governance are. If you want a single heads-up when the spec opens further or the compiler goes public, leave an email. No tracking, no list-sharing.
+
+<EmailCapture />

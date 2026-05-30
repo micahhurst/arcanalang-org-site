@@ -73,7 +73,7 @@ This site uses programming-language theory terms, Arcana-internal vocabulary, an
 
 ## Compiler / build vocabulary
 
-**E####** — Arcana error codes. `E2020` is the canonical XSS / unsafe HTML interpolation gate; `E3043` is the closed-row effect-row mismatch; `E6010` is the affine use-after-move violation; etc. The full registry lives in `spec/arcana-error-code-registry.md` in the Arcana repo.
+**E####** — Arcana error codes. `E2020` is the canonical XSS / unsafe HTML interpolation gate; `E3408` is the effect-row subset violation (the function body performs an effect not in its declared row); `E6010` is the affine use-after-move violation; etc. The full registry lives in `spec/arcana-error-code-registry.md` in the Arcana repo.
 
 **Gate corpus** — `tests/gate-corpus/E####/` directories containing synthetic-violation fixtures. Each blocking error code carries at least one fixture asserting the gate still fires. The canary-of-canary sentinel tests that the runner itself hasn't no-op'd.
 

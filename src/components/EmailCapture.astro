@@ -1,0 +1,103 @@
+---
+// Email capture form → posts to the /api/subscribe Pages Function (Cloudflare D1).
+//
+// Renders NOTHING until a Turnstile site key is provided, so the live site never
+// shows a non-functional form before the backend is provisioned. To activate:
+//   1. Set PUBLIC_TURNSTILE_SITE_KEY (build-time env) to your Turnstile *site* key.
+//   2. Provision the D1 binding `DB` + the `TURNSTILE_SECRET_KEY` env var (see db/schema.sql + setup doc).
+// For local preview, Cloudflare's always-pass test site key is 1x00000000000000000000AA.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "";
+const heading = Astro.props.heading ?? "Get notified when the compiler ships";
+---
+
+{siteKey && (
+  <form id="email-capture" class="email-capture not-content" novalidate>
+    <label for="ec-email"><strong>{heading}</strong></label>
+    <div class="ec-row">
+      <input
+        id="ec-email"
+        name="email"
+        type="email"
+        inputmode="email"
+        autocomplete="email"
+        required
+        placeholder="you@example.com"
+      />
+      <button type="submit">Notify me</button>
+    </div>
+    <div class="cf-turnstile" data-sitekey={siteKey} data-theme="auto"></div>
+    <p class="ec-consent">
+      One email when there's something real to show — the spec opening up, or the compiler going public.
+      No tracking, no list-sharing, unsubscribe anytime.
+    </p>
+    <p class="ec-status" role="status" aria-live="polite"></p>
+  </form>
+)}
+
+{siteKey && (
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
+
+{siteKey && (
+  <script is:inline>
+    (() => {
+      const form = document.getElementById("email-capture");
+      if (!form) return;
+      const status = form.querySelector(".ec-status");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = form.querySelector("#ec-email").value.trim();
+        const tokenEl = form.querySelector('[name="cf-turnstile-response"]');
+        const token = tokenEl ? tokenEl.value : "";
+        status.textContent = "Submitting…";
+        try {
+          const res = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ email, "cf-turnstile-response": token }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            status.textContent = "Thanks — you're on the list.";
+            form.reset();
+            if (window.turnstile) window.turnstile.reset();
+          } else if (data.error === "invalid_email") {
+            status.textContent = "That email doesn't look right.";
+          } else if (data.error === "captcha_required" || data.error === "captcha_failed") {
+            status.textContent = "Please complete the verification and try again.";
+          } else {
+            status.textContent = "Something went wrong. Please try again.";
+          }
+        } catch {
+          status.textContent = "Network error. Please try again.";
+        }
+      });
+    })();
+  </script>
+)}
+
+<style>
+  .email-capture { margin: 1.5rem 0; max-width: 34rem; }
+  .email-capture label { display: block; margin-bottom: .5rem; }
+  .ec-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .ec-row input {
+    flex: 1 1 14rem;
+    padding: .5rem .65rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: .375rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+  }
+  .ec-row button {
+    padding: .5rem 1rem;
+    border: 1px solid var(--sl-color-accent);
+    border-radius: .375rem;
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .cf-turnstile { margin-top: .75rem; }
+  .ec-consent { font-size: .85rem; opacity: .75; margin-top: .6rem; }
+  .ec-status { font-size: .9rem; margin-top: .35rem; min-height: 1.2em; }
+</style>

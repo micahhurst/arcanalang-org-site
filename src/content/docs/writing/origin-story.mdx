@@ -1,0 +1,87 @@
+---
+title: "I Set Out to Build Websites. I Ended Up Designing a Language for AI."
+description: "The origin story — how building software for small businesses led to Arcana: a programming language designed as a compile-time-safe target for AI code generation, with a human as reviewer."
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+I never planned to build a programming language. I want to be honest about that up front, because the version of this story where a founder sets out to invent a new language sounds insufferable, and the true version is more embarrassing and more useful.
+
+What I actually wanted was to build software for small businesses. I'd started with Elemental Sites — a Rails platform that uses AI to help a small business get a real website, one they genuinely own and that shouldn't silently break on them six months later. That part was working. But the longer I sat with it, the more the ambition grew past websites. A business doesn't just want a marketing page. It wants the thing that takes orders, tracks inventory, handles the back-of-house mess that actually runs the place. People don't want a brochure. They want an *app*.
+
+And that's where I hit the wall.
+
+The honest fallback plan was to hand-code these things one at a time — bespoke industry solutions, built by me, the slow way. Two decades of shipping software had taught me exactly how that movie ends. It's tedious, it doesn't scale, and worse, it never quite fits. Every business is a little different. Build a dozen of these apps and you've built a dozen *almost-right* apps, each one a snowflake you now have to maintain forever.
+
+So the obvious move was to lean harder on AI. Let the machine write the apps. And here's where I want to be careful, because this is the part people gloss over.
+
+The current generation of AI app-builders is genuinely impressive at the demo. You describe an app, you get an app. But a full application — real front end *and* real back end, auth, data, payments, the works — is an enormous problem to hold in your head all at once. So the tools compromise. They have to. And the compromises are not random; they cluster in exactly the place you'd least want them: the back end, the data layer, the seams between the generated pieces. In the output I actually dug into, that's where the holes showed up — not because the people building these tools are careless, but because they're trying to bolt full-stack generation onto languages that were designed for *humans* to write carefully, one decision at a time. An ordinary compiler checks that the code is well-formed — the types line up, the syntax is valid. What it can't check is whether the code *should* be doing what it's doing: whether this function has any business touching the database, whether that user input should be anywhere near a query. It just compiles whatever it's handed.
+
+I'd watch a tool generate something slick, then I'd look at what it actually produced, and I'd think: I cannot put a paying customer's business on top of this. Not someone whose livelihood depends on the order form not leaking their customers' data. And plain AI writing code in an ordinary language, outside the guardrails of any structured tool? Even more so. Too error-prone to expose a customer to. The errors don't announce themselves. They wait.
+
+That was the wall. I wanted to build full apps for people. The hand-coded path didn't scale. The AI path, as it existed, wasn't safe enough to bet someone's business on. I genuinely didn't have a way through.
+
+Then, about four months ago, I had the thought I tried very hard to ignore.
+
+*What if the problem isn't the AI — what if it's the language?*
+
+Almost every language was designed for a person sitting at a keyboard, making one careful decision at a time. We're now asking AI to write in those same languages and then acting surprised when it produces plausible-looking code with quiet holes in it. What if I built a language the other way around — one designed from the start as a *target for AI to generate*? Strict rules that catch whole categories of mistakes before the code runs. A function can't touch the database, reach the network, or send an email unless its signature openly declares it — so generated code can't quietly reach for a capability nobody handed it. A database connection can't be leaked, and it can't be used after it's closed — get that wrong and the program won't compile. And the common ways untrusted user input slips into a database query or a web page get caught at build time, instead of waiting for a security audit to find them later. A language where the whole application comes from one typed source — compiled to native Swift on iOS, Kotlin on Android, and HTMX-style TypeScript on the web. The point isn't speed or a single codebase; it's that the compiler's guarantees reach all the way to the front end. A mismatch between what the screen sends and what the back end expects is a build error, not a runtime surprise on a device you can't hand-fix. And one that removes the most common class of security problems by construction, so the machine can't even express those mistakes in the first place.
+
+The plan, to be clear, had been to ship Elemental Sites as a web builder *first* and think about a language much, much later. This was supposed to be a someday idea. So I told myself I'd just see if it was even possible. Write one prompt, sketch one version, satisfy my curiosity, get back to the real work.
+
+I wrote the first prompt to design the language, ran it, and looked hard at what came back — less at whether it was finished (it wasn't) than at whether the structure held under pressure. Enough of it did to keep me curious. *It can be done* got into my head and wouldn't leave.
+
+I tried to put it down. I really did. But I kept going back to *break* it — because I knew exactly how this looks: a guy gets a slick answer out of a model and mistakes it for the truth, which is the entire problem I'd set out to solve. So I didn't go looking for where it shone. I went looking for where it fell apart. Could it express auth without leaving a hole? What happened when untrusted data reached a query? Did the mobile case actually hold, or was that hand-waving? Every time I tried to knock it over, the failure I was bracing for didn't show up — and there was enough there to pull me one question deeper. I wasn't dabbling anymore. I was all the way in.
+
+That language is Arcana.
+
+The point of Arcana is not novelty. I have no interest in a vanity language, and the world does not need another one. The point is narrow and specific: it's a language built to be *written by AI and checked before it runs*. Because the compiler is strict and the language is designed for the machine to reason about, code the AI generates gets checked against the language's rules before it ever touches a customer. It's meant to generate the full stack, including mobile, when the language goes live. And that checkable correctness is the whole reason I can look at the original promise — software you actually own, that scales from an editable front end up to a full editable stack, instead of a throwaway prototype — and believe it's real.
+
+Here's the part that does the work. Say the model writes `get_posts` to read from the database but forgets to put that capability on the signature — `pub fn get_posts() -> Int`, with a `db_query` in the body. It doesn't compile: the body performs `{Database}`, the signature doesn't declare it, and the compiler rejects it with **E3408**, an effect-row mismatch. It only builds once the signature says what the body touches — `-> {Database} Int`.
+
+Here's that working version. And here's the part that trips people up: the model doesn't actually write the human-readable form. What it emits is the *canonical* form — closer to a compiler's IR than to anything a person would type. Same program, two views; on this site the canonical is shown by default, and you flip to "Human view" to read it:
+
+<Tabs syncKey="arcana-code-view">
+  <TabItem label="Canonical (S-expression)">
+```scheme
+;; pub fn get_posts() -> {Database} Int
+(dc-fn :fn
+  (fn-decl
+    :body (block
+      :stmts ()
+      :expr (ex-call
+        :args ((arg-positional :expr (ex-lit :value (lit-string :value "SELECT id, title, body, published FROM posts WHERE published = 1"))))
+        :fn (ex-ident :name "db_query")))
+    :contracts ()
+    :effects (Database)
+    :name "get_posts"
+    :params ()
+    :ret (ty-named :path "Int")
+    :tparams ()
+    :vis pub))
+```
+  </TabItem>
+  <TabItem label="Human view">
+```arcana
+pub fn get_posts() -> {Database} Int {
+  db_query("SELECT id, title, body, published FROM posts WHERE published = 1")
+}
+```
+  </TabItem>
+</Tabs>
+
+That `{Database}` is the whole game: the function has to say, out loud, what it's allowed to do — and a model can't slip a database call, a network call, or an email past a signature that doesn't admit it. The capability is on the label, or the code doesn't compile. And the canonical form is the other half of the point: Arcana is a target for a machine, not a keyboard. (If you want to learn to read it, [How to read Arcana code](/reading-arcana/) walks through this exact example.)
+
+The obvious objection — the one every engineer raises within about ten seconds — is that a model writes Python and TypeScript well because it has read billions of lines of them, and it has read essentially zero lines of Arcana. So why would it write a brand-new language well? Two answers. First, fluency isn't the goal; rejection is. I don't need the model to be a virtuoso — I need the compiler to throw out the dangerous kinds of wrong (the undeclared effects, the unsafe data paths, the leaked resources) so a confident mistake becomes a build error instead of a silent bug in someone's app. A smaller, stricter, more regular language is a *better* target for exactly that reason: less room to be wrong in, and the dangerous kinds of wrong don't compile. Second, I'd honestly have preferred not to do this. I reached for the tools I already had first — that's always the sane move — but none of them could make these guarantees. So I stopped reaching.
+
+I want to be exact about the security claim, because this is where most people get loud and I'd rather you trust me. Removing the biggest class of security problems by default is not the same as promising zero security problems, and I won't pretend otherwise. Software has bugs. Languages have edge cases. By construction is not the same as *unhackable*. What I can say is that the most common and most dangerous category of mistake is designed *out* by default, so the surface area left to defend is much smaller — and anything that slips through that net is a problem we'll attack the moment we see it, the same way you attack any bug. And these guarantees hold inside Arcana's own code: step into a hand-written escape hatch or foreign code and you're back to ordinary caution — the compiler holds the line only where the language does. Not a thing I get to wave away with a marketing word. I'd rather under-promise that and over-deliver than do the reverse.
+
+And there's a limit worth saying plainly: type-correct isn't the same as correct. Arcana can stop a function from touching data it has no business touching — it can't know whether your business logic is right. That part still belongs to the human reviewing what the machine wrote.
+
+I'll be straight about the state of things, too, because the people reading this can smell vapor. The compiler binary isn't public yet. What *is* public is the design: the language spec, the decisions, the reasoning behind every rule. That's deliberate. A language meant to make AI-written software trustworthy should be the most scrutinizable thing I build — out in daylight, where smart and skeptical people can read it and tell me where I'm wrong, before it asks anyone to trust it.
+
+I didn't mean to build a programming language. I meant to give people software they actually own and that doesn't quietly break on them — websites first, then real apps — and I assumed I'd assemble that out of tools that already existed. What I found is that the future I'd promised customers wasn't buildable on the tools I had. So the language isn't a detour away from that promise. It's the first version of the promise I haven't had to water down. It was supposed to take an afternoon; it's had me for four months — and for the first time, the thing I was actually chasing looks reachable.
+
+If you want to see what I've been doing instead of shipping the web builder like I planned, the design is all here — start with [the six pillars](/#the-six-pillars), or read [Honest Scope](/honest-scope/) for exactly what's proven and what isn't yet.
+
+And if you're building something where AI-written code has to be trustworthy — especially if you're a founder getting it off the ground — [I'd like to talk](mailto:micahhurst@arcanalang.org). I take on a few contract projects when they're the right fit.
